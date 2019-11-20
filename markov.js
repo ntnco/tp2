@@ -13,11 +13,15 @@ var writeFile = function (path, texte) {
 /* reçoit du texte : String
  * => retourne un tableau de tous les mots de ce texte : [Strings]
  */
-function obtenirMots(texte) {
+function obtenirMots(texte) { // p-ê faire map ou autre coool chose
+                              // TODO: faire fonction similaire qui sépare
+                              //       les paires de mots ?
     var mots = [];
     var mot = "";
     var precedent = " ";
     var actuel = "";
+
+    var occurences = {}; // {mot1:#, mot2:#, mot3:#... motn:#}
     
     for (var i = 0; i < texte.length; i++) {
         actuel = texte.charAt(i);
@@ -54,27 +58,77 @@ function estEspaceOuRetour(caract) {
 var creerModele = function(texte) {
 
     var mots = obtenirMots(texte); // faut séparer sur les " " et les "\n"
-    var dictionnaire = mots.filter(function(mot, i, mots){
-	return mots.indexOf(mot) === i;
-    });
-    
+    var dictionnaire = uniques(mots);
+        
     var modele = markov(dictionnaire, mots);
 
     return modele;
     
 };
 
-function markov(dictionnaire, mots) {
-    
-    var prochainsMots = dictionnaire.map(function(element, index) {
-	var occurencesElement = 0; 
-	var suivants = {};
-	var motPrecedent = "";
+function uniques(tableau) {
 
-	for (var i = 0; i < mots.length; i++) {
-	    // quand on trouve le mot, on check le suivant 
-	    // puis on incrémente l'objet _suivants_ à cette clé.
-	}
+    // cette première opération sert aux bonus sur les ordres, donc
+    // au cas où les éléments du tableau sont eux-mêmes des tableaux.
+    var tabStrings = tableau.map(function(x) { 
+        return "" + x;
+    });
+
+    var resultat = tabStrings.filter(function(mot, i, tabStrings){
+        return tabStrings.indexOf(mot) === i;});
+
+    return resultat;
+}
+
+// pour la markov d'ordre 1, on a besoin:
+// 1. array de tous les mots (on l'a : mots)
+// 2. array des mots uniques (on l'a : dictionnaire)
+// 3. TODO: objet avec les nombres d'occurences de tous les mots
+// 4. TODO: array avec toutes les paires
+// 5. TODO: array avec toutes les paires uniques
+// 6. TODO: objet avec les nombres d'occurences de toutes les paires
+// 7. TODO: mettre tout ça ensemble et calculer les probas, ce qui 
+//          va nous donner le modèle à retourner.
+
+
+function markov(dictionnaire, mots) {
+
+    dictionnaire = "".concat(dictionnaire, "");
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /*var prochainsMots = dictionnaire.map(function(element, index) {
+
+        var occurencesElement = 0; 
+        var suivants = {};
+        var motPrecedent = "";
+
+        for (var i = 0; i < mots.length; i++) {
+            // quand on trouve le mot, on check le suivant 
+            // puis on incrémente l'objet _suivants_ à cette clé.
+        }
 	// une fois la boucle terminée, on calcule la proba de chaque mot
 	// et on pousse un enregistrement de chaque prochain mot dans 
 	// prochainsMots comme demandé dans l'énoncé.
@@ -82,11 +136,11 @@ function markov(dictionnaire, mots) {
 	// Cette boucle sera répétée pour chaque élément du dictionnaire.
 	//
 	// self-rappel: le prochain peut possiblement être le même mot.
-    })
+    })*/
 
 
-    return {dictionnaire:dictionnaire, 
-        prochainsMots:prochainsMots};
+    return {dictionnaire: dictionnaire, 
+        prochainsMots: prochainsMots};
 }
 
 
