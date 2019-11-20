@@ -181,11 +181,12 @@ var tests = function() {
     fichier avec :
        node markov.js
      */
+	
     console.assert(estEspaceOuRetour(" ") == true);
     console.assert(estEspaceOuRetour("\n") == true);
     console.assert(estEspaceOuRetour("a") == false);
     console.assert(estEspaceOuRetour("0") == false);
-
+	console.log(obtenirMots(["Je suis une toute toute toute totoche"]));
     console.log('Les tests ont été exécutés.'); // cette ligne peut être effacéééééééée
 
 };
