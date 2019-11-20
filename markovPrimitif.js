@@ -1,7 +1,3 @@
-// Auteurs:
-// Emma Parent-Senez
-// Antoien Colson-Ratelle, p0990432
-
 // Utilitaires pour manipuler des fichiers
 var fs = require("fs");
 
@@ -21,9 +17,7 @@ function obtenirMots(texte) { // p-ê faire map ou autre coool chose
                               // TODO: faire fonction similaire qui sépare
                               //       les paires de mots ?
     var mots = [];
-    var paires = [];
-    var motActuel = "";
-    var motPrecedent = "";
+    var mot = "";
     var precedent = " ";
     var actuel = "";
 
@@ -35,21 +29,18 @@ function obtenirMots(texte) { // p-ê faire map ou autre coool chose
         actuel = texte.charAt(i);
         if (estEspaceOuRetour(actuel)) {
             if (!estEspaceOuRetour(precedent)){
-                mots.push(motActuel);
-                paires.push([motPrecedent, motActuel])
+                
+                mots.push(mot);
             }
-            motPrecedent = motActuel;
-            motActuel = "";
+            mot = "";
         } else {
-            motActuel += actuel;
-            if (i == texte.length - 1){
-                mots.push(motActuel);
-                paires.push([motPrecedent, motActuel])
-            }
+            mot += actuel;
+            if (i == texte.length - 1)
+                mots.push(mot);
         }
         precedent = actuel;
     }
-    return [mots, paires];
+    return mots;
 }
 
 
@@ -97,7 +88,7 @@ function uniques(tableau) {
 // 1. array de tous les mots (on l'a : mots)
 // 2. array des mots uniques (on l'a : dictionnaire)
 // 3. TODO: objet avec les nombres d'occurences de tous les mots
-// 4. array avec toutes les paires
+// 4. TODO: array avec toutes les paires
 // 5. TODO: array avec toutes les paires uniques
 // 6. TODO: objet avec les nombres d'occurences de toutes les paires
 // 7. TODO: mettre tout ça ensemble et calculer les probas, ce qui 
