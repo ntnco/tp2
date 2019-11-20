@@ -1,6 +1,6 @@
-1// Auteurs:
+//// Auteurs:
 // Emma Parent-Senez, 20071506
-// Antoien Colson-Ratelle, 990432
+// Antoine Colson-Ratelle, 990432
 
 // Utilitaires pour manipuler des fichiers
 var fs = require("fs");
@@ -12,6 +12,7 @@ var readFile = function (path) {
 var writeFile = function (path, texte) {
     fs.writeFileSync(path, texte);
 };
+
 
 
 /* reçoit du texte : String
