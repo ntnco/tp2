@@ -73,7 +73,7 @@ function markov(dictionnaire, mots) {
 
 	for (var i = 0; i < mots.length; i++) {
 	    // quand on trouve le mot, on check le suivant 
-	    // puis on incrémente le tableau _suivants_ à cette clé.
+	    // puis on incrémente l'objet _suivants_ à cette clé.
 	}
 	// une fois la boucle terminée, on calcule la proba de chaque mot
 	// et on pousse un enregistrement de chaque prochain mot dans 
