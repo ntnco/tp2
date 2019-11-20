@@ -1,0 +1,136 @@
+// Utilitaires pour manipuler des fichiers
+var fs = require("fs");
+
+var readFile = function (path) {
+    return fs.readFileSync(path).toString();
+};
+
+var writeFile = function (path, texte) {
+    fs.writeFileSync(path, texte);
+};
+
+
+/* reçoit du texte : String
+ * => retourne un tableau de tous les mots de ce texte : [Strings]
+ */
+function obtenirMots(texte) {
+    var mots = [];
+    var mot = "";
+    var precedent = " ";
+    var actuel = "";
+    
+    for (var i = 0; i < texte.length; i++) {
+        actuel = texte.charAt(i);
+        if (estEspaceOuRetour(actuel)) {
+            if (!estEspaceOuRetour(precedent))
+                mots.push(mot);
+            mot = "";
+        } else {
+            mot += actuel;
+            if (i == texte.length - 1)
+                mots.push(mot);
+        }
+        precedent = actuel;
+    }
+    return mots;
+}
+
+
+
+// reçoit un caractère: String
+// => retourne si c'est un espace: Bool
+function estEspaceOuRetour(caract) {
+    return (caract == " " || caract == "\n"); 
+}
+
+
+
+/* cette fonction reçoit du texte et 
+ * 1. en sépare les mots
+ * 2. obtient les mots uniques
+ * 3. appelle markov() pour obtenir un modèle de markov
+ * 4. retourne le modèle
+ */
+var creerModele = function(texte) {
+
+    var mots = obtenirMots(texte); // faut séparer sur les " " et les "\n"
+    var dictionnaire = mots.filter(function(mot, i, mots){
+	return mots.indexOf(mot) === i;
+    });
+    
+    var modele = markov(dictionnaire, mots);
+
+    return modele;
+    
+};
+
+function markov(dictionnaire, mots) {
+    
+    var prochainsMots = dictionnaire.map(function(element, index) {
+	var occurencesElement = 0; 
+	var suivants = {};
+	var motPrecedent = "";
+
+	for (var i = 0; i < mots.length; i++) {
+	    // quand on trouve le mot, on check le suivant 
+	    // puis on incrémente le tableau _suivants_ à cette clé.
+	}
+	// une fois la boucle terminée, on calcule la proba de chaque mot
+	// et on pousse un enregistrement de chaque prochain mot dans 
+	// prochainsMots comme demandé dans l'énoncé.
+	//
+	// Cette boucle sera répétée pour chaque élément du dictionnaire.
+	//
+	// self-rappel: le prochain peut possiblement être le même mot.
+    })
+
+
+    return {dictionnaire:dictionnaire, 
+        prochainsMots:prochainsMots};
+}
+
+
+
+// TODO : compléter cette fonction
+var genererProchainMot = function(modele, motActuel) {
+
+};
+
+// TODO : compléter cette fonction
+var genererPhrase = function(modele, maxNbMots) {
+    
+};
+
+// TODO : compléter cette fonction
+var genererParagraphes = function(modele, nbParagraphes, maxNbPhrases, maxNbMots) {
+    
+};
+
+
+
+
+var tests = function() {
+    /* Les tests seront lancés automatiquement si vous appelez ce
+    fichier avec :
+       node markov.js
+     */
+    console.assert(estEspaceOuRetour(" ") == true);
+    console.assert(estEspaceOuRetour("\n") == true);
+    console.assert(estEspaceOuRetour("a") == false);
+    console.assert(estEspaceOuRetour("0") == false);
+
+    console.log('Les tests ont été exécutés.'); // cette ligne peut être effacéééééééée
+
+};
+
+
+
+if (require.main === module) {
+    // Si on se trouve ici, alors le fichier est exécuté via : nodejs gen.js
+    tests(); // On lance les tests
+} else {
+    /* Sinon, le fichier est inclus depuis index.js
+       On exporte les fonctions importantes pour le serveur web */
+    exports.creerModele = creerModele;
+    exports.genererParagraphes = genererParagraphes;
+}
