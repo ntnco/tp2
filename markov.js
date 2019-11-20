@@ -1,5 +1,5 @@
-// Auteurs:
-// Emma Parent-Senez
+1// Auteurs:
+// Emma Parent-Senez, 20071506
 // Antoien Colson-Ratelle, p0990432
 
 // Utilitaires pour manipuler des fichiers
