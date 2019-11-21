@@ -21,6 +21,10 @@ var writeFile = function (path, texte) {
 function obtenirMots(texte) { // p-ê faire map ou autre coool chose
                               // TODO: faire fonction similaire qui sépare
                               //       les paires de mots ?
+							  //Tu avais actually raison pour le bonus 
+							  //On doit considérer la suite de r-mots qui vient
+							  //avant comme un élément qui conditionne le mot 
+							  //suivant
     var mots = [];
     var paires = [];
     var motActuel = "";
@@ -37,7 +41,7 @@ function obtenirMots(texte) { // p-ê faire map ou autre coool chose
         if (estEspaceOuRetour(actuel)) {
             if (!estEspaceOuRetour(precedent)){
                 mots.push(motActuel);
-                paires.push([motPrecedent, motActuel])
+                paires.push([motPrecedent, motActuel])//Gosser pour rendre ca r
             }
             motPrecedent = motActuel;
             motActuel = "";
@@ -51,7 +55,7 @@ function obtenirMots(texte) { // p-ê faire map ou autre coool chose
         precedent = actuel;
     }
     return [mots, paires];
-}
+}//Est-ce que ça serait Weird de juste retourner les paires?
 
 
 
@@ -70,9 +74,9 @@ function estEspaceOuRetour(caract) {
  * 4. retourne le modèle
  */
 var creerModele = function(texte) {
-
+	
     var mots = obtenirMots(texte); // faut séparer sur les " " et les "\n"
-    var dictionnaire = uniques(mots);
+    var dictionnaire = uniques(mots[0]);//Juste traiter le premiertab
         
     var modele = markov(dictionnaire, mots);
 
@@ -187,7 +191,7 @@ var tests = function() {
     console.assert(estEspaceOuRetour("\n") == true);
     console.assert(estEspaceOuRetour("a") == false);
     console.assert(estEspaceOuRetour("0") == false);
-	console.log(obtenirMots(["Je suis une toute toute toute totoche"]));
+	console.log(obtenirMots("Je suis une toute toute toute totoche"));
     console.log('Les tests ont été exécutés.'); // cette ligne peut être effacéééééééée
 
 };
