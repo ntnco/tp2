@@ -61,7 +61,7 @@ function obtenirPaires(texte, n) { // p-ê faire map ou autre coool chose
     }
     return [mots, paires];
 }//Est-ce que ça serait Weird de juste retourner les paires?
- ///// j'aime comment tu penses. ou des trios, des quatuors, des r-groupes :o
+ ///// j'aime comment tu penses. ou des trios, des quatuors, des r-groupes :o  
 
 
 // reçoit un caractère: String
@@ -81,9 +81,13 @@ function estEspaceOuRetour(caract) {
 var creerModele = function(texte) {
 	
     var mots = obtenirMots(texte); // faut séparer sur les " " et les "\n"
+								//Pour le moment retourne un tableau [mots,paires]
+								//éventuellement[mots, (r+1)groupement]
     var dictionnaire = uniques(mots[0]);//Juste traiter le premiertab
+								//nous revient le dico en ordre d'apparition
         
-    var modele = markov(dictionnaire, mots);
+    var modele = markov(dictionnaire, mots[1]);//Je crois qu'on devrais
+											//juste lui envoyer les (r+1)groupements
 
     return modele;
     
