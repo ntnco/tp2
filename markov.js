@@ -18,13 +18,14 @@ var writeFile = function (path, texte) {
 /* reçoit du texte : String
  * => retourne un tableau de tous les mots de ce texte : [Strings]
  */
-function obtenirMots(texte) { // p-ê faire map ou autre coool chose
-                              // TODO: faire fonction similaire qui sépare
-                              //       les paires de mots ?
-							  //Tu avais actually raison pour le bonus 
-							  //On doit considérer la suite de r-mots qui vient
-							  //avant comme un élément qui conditionne le mot 
-							  //suivant
+function obtenirPaires(texte, n) { // p-ê faire map ou autre coool chose
+    //Tu avais actually raison pour le bonus 
+    //On doit considérer la suite de r-mots qui vient
+    //avant comme un élément qui conditionne le mot 
+    //suivant
+    //
+    // intéressant! donc on va pas juste manipuler des matrices.
+
     var mots = [];
     var paires = [];
     var motActuel = "";
@@ -42,6 +43,10 @@ function obtenirMots(texte) { // p-ê faire map ou autre coool chose
             if (!estEspaceOuRetour(precedent)){
                 mots.push(motActuel);
                 paires.push([motPrecedent, motActuel])//Gosser pour rendre ca r
+                                                      // j'ai trouvé comment faire!
+                // s'agit de créer un array des n mots précédents, 
+                // puis quand on dépasse la longueur max on pop le premier élément.
+                // je peux le coder vendredi pm
             }
             motPrecedent = motActuel;
             motActuel = "";
@@ -56,7 +61,7 @@ function obtenirMots(texte) { // p-ê faire map ou autre coool chose
     }
     return [mots, paires];
 }//Est-ce que ça serait Weird de juste retourner les paires?
-
+ ///// j'aime comment tu penses. ou des trios, des quatuors, des r-groupes :o
 
 
 // reçoit un caractère: String
