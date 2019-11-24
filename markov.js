@@ -117,11 +117,15 @@ function uniques(tableau) {
 // 7. TODO: mettre tout ça ensemble et calculer les probas, ce qui 
 //          va nous donner le modèle à retourner.
 
+/*Pour le point 3, une fonction qui retourne les occurences? avec les 
+(r+1) groupements en paramètres et le dico. A chaque fois qu'un mot apparait */
+
 
 function markov(dictionnaire, mots) {
 
-    dictionnaire = "".concat(dictionnaire, "");
-    
+    dictionnaire = "".concat(dictionnaire, "");//so ca ca rend notre dico qqchose
+	
+    //
 
 
 
