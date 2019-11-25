@@ -11,16 +11,16 @@
 /* C'est la fonction principale. Elle reçoit du texte : string 
  * et retourne un objet: {[strings], [enregistrements]}
  * 
- * Le format de l'objet retourné est spécifié dans l'énoncé. 
- * C'est un modèle de Markov.
+ * L'objet retourné est un modèle de Markov qui suit les specs 
+ * exigées dans l'énoncé.
  */
 var creerModele = function(texte, r = 1) {
-    
+
     var mots = obtenirMots(texte), // sépare sur les " " et les "\n"
         groupes = grouper(mots, r),
         megaGroupes = megaGrouper(mots, r),
         modele = {};
-        
+
     modele.dictionnaire = toutSaufLesDerniers(groupes);
 
     modele.prochainsMots = trouverProchains(modele.dictionnaire, 
@@ -35,9 +35,12 @@ var creerModele = function(texte, r = 1) {
 };
 
 
-Array.prototype.indexOfKey = function (clef){
+/* Cette méthode cherche un mot dans un tableau d'enregistrements
+ * Elle retourne l'index du mot ciblé. 
+ */
+Array.prototype.indexOfMot = function (motCible){
     for (var i = 0; i < this.length; i++)
-        if (this[i].mot == clef)
+        if (this[i].mot == motCible)
             return i;
     return -1;
 }
@@ -51,42 +54,38 @@ Array.prototype.indexOfKey = function (clef){
  *
  * Elle retourne un tableau d'enregistrements en comptant les occurences 
  * du 2e élément du 2e tableau.
+ *
+ * Pour comprendre le fonctionnement de cette fonction, il est important
+ * de savoir que l'argument megaGroupes contient des paires de 2 strings:
+ * a) la 1re string contient les mots précédents
+ * b) la 2e string contient le mot actuel.
  */
 function trouverProchains(dico, megaGroupes) {
     var resultat = [],
         compte = 0,
         i = 0,
         bonIndex;
-    for (mot of dico) {
+
+    // tu peux en apprendre plus sur for...of
+    // ici: https://mzl.la/2qI1t5t
+    for (mot of dico) {  
         resultat.push([]);
         for (paire of megaGroupes) {
             if (paire[0] == mot) {
-                compte++
-                bonIndex = resultat[i].indexOfKey(paire[1]);
-                if (bonIndex == -1) {
+                compte++; // servira à calculer la prob du mot
+                bonIndex = resultat[i].indexOfMot(paire[1]); //cherche paire[1]
+                if (bonIndex == -1)
                     resultat[i].push({mot:paire[1], prob:1});
-                } else {
+                else
                     resultat[i][bonIndex].prob++;
-                }
             }
         }
-        for (var j = 0; j < resultat[i].length; j++) {
-            resultat[i][j].prob /= compte;
-        }
+        for (var j = 0; j < resultat[i].length; j++)
+            resultat[i][j].prob /= compte; // calcule la prob du mot
         compte = 0;
         i++;
     }
     return resultat;
-}
-
-/* INUTILISÉE. à deleter.
- */
-function grouperSimple(tableau) {
-    return tableau.map(function (x) {
-        var i = debutPropre(x);
-        return x.slice(i).join(" "); // on laisse les espaces au début, 
-        // car les espaces au début signifient qu'il y avait un "" avant :)
-    })
 }
 
 
@@ -95,50 +94,6 @@ function toutSaufLesDerniers(tableau) {
         return e.slice(0, e.length - 1).join(" ");
     }))];
 }
-
-
-function reEspacer(groupes) {
-    var tableauUniques = groupes.map(function (x) {
-        var i = debutPropre(x);
-        return x.slice(i).join(" ");
-    });
-    return tableauUniques;
-}
-
-
-
-function prochains(dicoUniques, gUniques, 
-    cardinaliteMots, cardinaliteGroupes) {
-
-    var resultat = [], 
-        mot;
-
-    // cette boucle check 
-    // 1. si le mot est le dernier du groupe unique de même index
-    // 2. si oui, alors resultat.push(le reste )
-    for (var i = 0; i < dicoUniques.length; i++) {
-        mot = dicoUniques[i];
-        groupeActuel = gUniques[i];
-        if (groupeActuel[groupeActuel.length - 1] == mot) {
-            resultat.push(mot);
-        }
-    }
-
-    return resultat; // retourne rien, à enquêter... 
-}
-
-
-// Utilitaires pour manipuler des fichiers
-var fs = require("fs");
-
-var readFile = function (path) {
-    return fs.readFileSync(path).toString();
-};
-
-var writeFile = function (path, texte) {
-    fs.writeFileSync(path, texte);
-};
-
 
 
 /* reçoit du texte : String
@@ -186,7 +141,8 @@ function grouper(mots, n) {
  * suivis du mot qui les suit.
  *
  * Les "mégaGroupes" obtenus ne sont pas nécessairement 
- * uniques, au contraire, ils sont exhaustifs.
+ * uniques, au contraire, ils sont exhaustifs. Ça permettra
+ * de compter les occurences de leur mot final plus tard.
  * */
 function megaGrouper(mots, n) {
     var megaGroupes = grouper(mots, n),
@@ -237,6 +193,8 @@ Array.prototype.indexOfArrays = function (sousTableau) {
 }
 
 
+// cette fonction retourne une Bool qui indique si les 2 tableaux
+// passés en arguments ont les mêmes valeurs.
 function sontIdentiques(tableau1, tableau2) {
     for (var i = 0; i < tableau1.length; i++) {
         if (tableau1[i] != tableau2[i])
@@ -253,45 +211,15 @@ function estEspaceOuRetour(caract) {
 }
 
 
-
-
-
+// cette fonction retourne les mots uniques du tableau qu'elle reçoit.
+// input: [strings]
+// output: [strings]
 function motsUniques(tableau) {
-
     var resultat = tableau.filter(function(mot, i, tableau){
         return tableau.indexOf(mot) === i;
     });
     return resultat;
 }
-
-
-function occurencesMots(mots) {
-    var resultat = {};
-    for (var i = 0; i < mots.length; i++) {
-        if (!(mots[i] in resultat))
-            resultat[mots[i]] = 1;
-        else 
-            resultat[mots[i]]++;
-    }
-    return resultat;
-}
-
-
-function occurencesGroupes(groupes) {
-    var resultat = {};
-    var groupeFormatte; 
-    for (var i = 0; i < groupes.length; i++) {
-        groupeFormatte = groupes[i].join(" ");
-        if (!(groupeFormatte in resultat))
-            resultat[groupeFormatte] = 1;
-        else 
-            resultat[groupeFormatte]++;
-    }
-    return resultat;
-}
-
-
-
 
 
 // TODO : compléter cette fonction
@@ -302,33 +230,14 @@ var genererProchainMot = function(modele, motActuel) {
 
 // TODO : compléter cette fonction
 var genererPhrase = function(modele, maxNbMots) {
-    
+
 };
 
 
 // TODO : compléter cette fonction
 var genererParagraphes = function(modele, nbParagraphes, maxNbPhrases, maxNbMots) {
-    
-};
-
-
-
-
-var tests = function() {
-    /* Les tests seront lancés automatiquement si vous appelez ce
-    fichier avec :
-       node markov.js
-     */
-	
-    console.assert(estEspaceOuRetour(" ") == true);
-    console.assert(estEspaceOuRetour("\n") == true);
-    console.assert(estEspaceOuRetour("a") == false);
-    console.assert(estEspaceOuRetour("0") == false);
-	console.log(obtenirMots("Je suis une toute toute toute totoche"));
-    console.log('Les tests ont été exécutés.'); // cette ligne peut être effacéééééééée
 
 };
-
 
 
 if (require.main === module) {
@@ -340,3 +249,28 @@ if (require.main === module) {
     exports.creerModele = creerModele;
     exports.genererParagraphes = genererParagraphes;
 }
+
+
+// Utilitaires pour manipuler des fichiers
+var fs = require("fs");
+
+var readFile = function (path) {
+    return fs.readFileSync(path).toString();
+};
+
+var writeFile = function (path, texte) {
+    fs.writeFileSync(path, texte);
+};
+
+
+var tests = function() {
+    /* Les tests seront lancés automatiquement si vous appelez ce
+    fichier avec :
+       node markov.js
+       */
+
+    console.assert(estEspaceOuRetour(" ") == true);
+    console.assert(estEspaceOuRetour("\n") == true);
+    console.assert(estEspaceOuRetour("a") == false);
+    console.assert(estEspaceOuRetour("0") == false);
+};
