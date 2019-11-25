@@ -14,24 +14,24 @@ var creerModele = function(texte, r = 2) {
     var mots = obtenirMots(texte), // sépare sur les " " et les "\n"
         dicoUniques = motsUniques(mots), // grouperUniques de taille r-1 
         groupes = grouper(mots, r),
-        groupesUniques = reEspacer(grouperUniques(groupes)),
+        gUniques = grouperUniques(groupes),
+        gUniquesEspaces = gUniques.join(" "),
+        gUniquesPremiers = reEspacer(gUniques) 
         cardinaliteMots = occurencesMots(mots),
         cardinaliteGroupes = occurencesGroupes(groupes); 
 
     var modele = {};
 
-    modele.dictionnaire = groupesUniques
-        .slice(0, groupesUniques.length - 1)
-        .join(" ");
+    modele.dictionnaire = gUniques
+        .slice(0, gUniques.length - 1).join(" ");
 
-    modele.prochainsMots = prochains(dicoUniques, groupesUniques, 
+    modele.prochainsMots = prochains(dicoUniques, gUniques, 
         cardinaliteMots, cardinaliteGroupes)
 
     return modele;
 };
 
 function reEspacer(groupes) {
-    console.table(groupes);
     var tableauUniques = groupes.map(function (x) {
         if (x[0] == "")
             return x[x.length - 1]; // trouver qqch qui corrige ça :)
@@ -44,6 +44,11 @@ function reEspacer(groupes) {
 
 function prochains(dicoUniques, groupesUniques, 
     cardinaliteMots, cardinaliteGroupes) {
+    
+    console.table(dicoUniques);
+    console.table(groupesUniques);
+    console.table(cardinaliteMots);
+    console.table(cardinaliteGroupes);
 
     var resultat = [], 
         mot;
