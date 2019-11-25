@@ -19,18 +19,23 @@ var creerModele = function(texte, r = 2) {
         cardinaliteGroupes = occurencesGroupes(groupes); 
 
     var modele = {};
+
     modele.dictionnaire = groupesUniques
         .slice(0, groupesUniques.length - 1)
         .join(" ");
-    modele.prochainsMots = prochains(dictionnaire, groupesUniques, 
+
+    modele.prochainsMots = prochains(dicoUniques, groupesUniques, 
         cardinaliteMots, cardinaliteGroupes)
 
     return modele;
 };
 
-function reEspacer(groupes)
+function reEspacer(groupes) {
+    console.table(groupes);
     var tableauUniques = groupes.map(function (x) {
-        return x.split(" ");
+        if (x[0] == "")
+            return x[x.length - 1]; // trouver qqch qui corrige ça :)
+        return x.join(" ");
     });
     return tableauUniques;
 }
@@ -46,15 +51,15 @@ function prochains(dicoUniques, groupesUniques,
     // cette boucle check 
     // 1. si le mot est le dernier du groupe unique de même index
     // 2. si oui, alors resultat.push(le reste )
-    for (var i = 0; i < dictionnaire.length; i++) {
-        mot = dictionnaire[i];
+    for (var i = 0; i < dicoUniques.length; i++) {
+        mot = dicoUniques[i];
         groupeActuel = groupesUniques[i];
         if (groupeActuel[groupeActuel.length - 1] == mot) {
-            resultat
+            resultat.push(mot);
         }
     }
 
-    return resultat; 
+    return resultat; // retourne rien, à enquêter... 
 }
 
 
