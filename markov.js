@@ -226,10 +226,19 @@ function motsUniques(tableau) {
 // TODO : compléter cette fonction				Continuer ici
 var genererProchainMot = function(modele, motActuel) {
 	//On va chercher l'indice de motActuel en parcourant le dictionnaire
-	
+	var motMaintenant=""
 	var index = modele.dictionnaire.indexOf(motActuel);
 	var prochainsMotsPossibles = modele.prochainsMots[index];
-	var uniforme01= Math.random;
+	var uniforme01= Math.random, cummul=0;
+	for(motPossible of prochainsMotsPossibles){
+		cummul+=motPossible.prob;
+		if(cummul>uniforme01){
+			motMaintenant=motPossible.mot;
+			return motMaintenant;
+		}
+		
+	}
+
 	
 	
 	
