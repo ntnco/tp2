@@ -344,3 +344,6 @@ if (require.main === module) {
     exports.creerModele = creerModele;
     exports.genererParagraphes = genererParagraphes;
 }
+
+
+
