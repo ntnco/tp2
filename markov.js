@@ -39,14 +39,16 @@ function obtenirMots(texte, n) {
 }
 
 
-function grouper(mots, r) {
+/* commentaires explicatifs ici
+ *
+ */
+function grouper(mots, r ) {
     var vides = Array(r - 1).fill(""),
         tableauComplet = vides.concat(mots),
         resultat = [];
 
     for (var i = 0; i < mots.length; i++)
         resultat.push(tableauComplet.slice(i, i + r))
-
     return resultat;
 }
 
@@ -96,66 +98,61 @@ function estEspaceOuRetour(caract) {
  * 3. appelle markov() pour obtenir un modèle de markov
  * 4. retourne le modèle
  */
-var creerModele = function(texte) {
-	
-    var mots = obtenirMots(texte); // faut séparer sur les " " et les "\n"
-								//Pour le moment retourne un tableau [mots,paires]
-								//éventuellement[mots, (r+1)groupement]
-        
-    var modele = markov(dictionnaire, mots[1]);//Je crois qu'on devrais
-											//juste lui envoyer les (r+1)groupements
+var creerModele = function(texte, r = 2) {
+    var mots = obtenirMots(texte), // sépare sur les " " et les "\n"
+        dictionnaire = motsUniques(mots),
+        groupes = grouper(mots);
 
     return modele;
-    
 };
 
-function uniques(tableau) {
+
+function motsUniques(tableau) {
 
     var resultat = tabStrings.filter(function(mot, i, tabStrings){
-        return tabStrings.indexOf(mot) === i;});
-
+        return tabStrings.indexOf(mot) === i;
+    });
     return resultat;
 }
+
+
+function occurencesMots(mots) {
+    var resultat = {};
+    for (var i = 0; i < mots.length; i++) {
+        if (!(mots[i] in resultat))
+            resultat[mots[i]] = 1;
+        else 
+            resultat[mots[i]]++;
+    }
+    return resultat;
+}
+
+
+function occurencesGroupes(groupes) {
+    var resultat = {};
+    var groupeFormatte; 
+    for (var i = 0; i < groupes.length; i++) {
+        groupeFormatte = groupes[i].join(" ");
+        if (!(groupeFormatte in resultat))
+            resultat[groupeFormatte] = 1;
+        else 
+            resultat[groupeFormatte]++;
+    }
+    return resultat;
+}
+
+
 
 // pour la markov d'ordre 1, on a besoin:
 // 1. array de tous les mots (on l'a : mots)
 // 2. array des mots uniques (on l'a : dictionnaire)
-// 3. TODO: objet avec les nombres d'occurences de tous les mots
+// 3. objet avec les nombres d'occurences de tous les mots
 // 4. array avec toutes les paires et groupes-r yeahhhhh
-// 5. TODO: array avec toutes les paires uniques
-// 6. TODO: objet avec les nombres d'occurences de toutes les paires
-// 7. TODO: mettre tout ça ensemble et calculer les probas, ce qui 
-//          va nous donner le modèle à retourner.
-
-
-function markov(dictionnaire, mots) {
-
-
-
-    /*var prochainsMots = dictionnaire.map(function(element, index) {
-
-        var occurencesElement = 0; 
-        var suivants = {};
-        var motPrecedent = "";
-
-        for (var i = 0; i < mots.length; i++) {
-            // quand on trouve le mot, on check le suivant 
-            // puis on incrémente l'objet _suivants_ à cette clé.
-        }
-	// une fois la boucle terminée, on calcule la proba de chaque mot
-	// et on pousse un enregistrement de chaque prochain mot dans 
-	// prochainsMots comme demandé dans l'énoncé.
-	//
-	// Cette boucle sera répétée pour chaque élément du dictionnaire.
-	//
-	// self-rappel: le prochain peut possiblement être le même mot.
-    })*/
-
-
-    return {dictionnaire: dictionnaire, 
-        prochainsMots: prochainsMots};
-}
-
+// 5. array avec toutes les paires uniques
+// 6. objet avec les nombres d'occurences de toutes les paires
+// 7. TODO: en se basant sur l'occurence d'une paire donnée, 
+//          diviser par le total d'occurences du dernier mot ce qui donne sa proba
+// 8. TODO: généraliser à r 
 
 
 // TODO : compléter cette fonction
@@ -163,10 +160,12 @@ var genererProchainMot = function(modele, motActuel) {
 
 };
 
+
 // TODO : compléter cette fonction
 var genererPhrase = function(modele, maxNbMots) {
     
 };
+
 
 // TODO : compléter cette fonction
 var genererParagraphes = function(modele, nbParagraphes, maxNbPhrases, maxNbMots) {
