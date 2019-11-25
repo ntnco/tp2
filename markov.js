@@ -3,52 +3,82 @@
 // Antoine Colson-Ratelle, 990432
 
 
+// 1. TODO: en se basant sur l'occurrence d'une paire donnée, 
+//          diviser par le total d'occurences du dernier mot
+//          ce qui donne sa prob: n
+// 2. TODO: pour une raison x, les prochains mots arrêtent de
+//          populer après un doublon. Réparer ça
 
-/* cette fonction reçoit du texte et 
- * 1. en sépare les mots
- * 2. obtient les mots uniques
- * 3. appelle markov() pour obtenir un modèle de markov
- * 4. retourne le modèle
+
+/* C'est la fonction principale. Elle reçoit du texte : string 
+ * et retourne un objet: {[strings], [enregistrements]}
+ * 
+ * Le format de l'objet retourné est spécifié dans l'énoncé. 
+ * C'est un modèle de Markov.
  */
-var creerModele = function(texte, r = 2) {
+var creerModele = function(texte, r = 1) {
+    
     var mots = obtenirMots(texte), // sépare sur les " " et les "\n"
-        dicoUniques = motsUniques(mots), // grouperUniques de taille r-1 
         groupes = grouper(mots, r),
+        megaGroupes = megaGrouper(mots, r),
         gUniques = grouperUniques(groupes),
-        gUniquesEspaces = gUniques.join(" "),
-        gUniquesPremiers = reEspacer(gUniques) 
+        modele = {};
+        
+    modele.dictionnaire = toutSaufLesDerniers(gUniques);
+
+    var dicoUniques = motsUniques(mots),
         cardinaliteMots = occurencesMots(mots),
         cardinaliteGroupes = occurencesGroupes(groupes); 
 
-    var modele = {};
+    console.log("megaGroupes");
+    console.table(megaGroupes);
 
-    modele.dictionnaire = gUniques
-        .slice(0, gUniques.length - 1).join(" ");
 
-    modele.prochainsMots = prochains(dicoUniques, gUniques, 
-        cardinaliteMots, cardinaliteGroupes)
+    modele.prochainsMots = trouverProchains(modele.dictionnaire, 
+        megaGroupes, cardinaliteMots, cardinaliteGroupes);
 
+    console.table(modele);
     return modele;
 };
 
+
+function trouverProchains() {
+    var resultat = {};
+
+
+}
+
+/*
+ *
+ */
+function grouperSimple(tableau) {
+    return tableau.map(function (x) {
+        var i = debutPropre(x);
+        return x.slice(i).join(" "); // on laisse les espaces au début, 
+        // car les espaces au début signifient qu'il y avait un "" avant :)
+    })
+}
+
+
+function toutSaufLesDerniers(tableau) {
+    return [...new Set(tableau.map(function (e) {
+        return e.slice(0, e.length - 1).join(" ");
+    }))];
+}
+
+
 function reEspacer(groupes) {
     var tableauUniques = groupes.map(function (x) {
-        if (x[0] == "")
-            return x[x.length - 1]; // trouver qqch qui corrige ça :)
-        return x.join(" ");
+        var i = debutPropre(x);
+        return x.slice(i).join(" ");
     });
     return tableauUniques;
 }
 
 
 
-function prochains(dicoUniques, groupesUniques, 
+function prochains(dicoUniques, gUniques, 
     cardinaliteMots, cardinaliteGroupes) {
-    
-    console.table(dicoUniques);
-    console.table(groupesUniques);
-    console.table(cardinaliteMots);
-    console.table(cardinaliteGroupes);
 
     var resultat = [], 
         mot;
@@ -58,7 +88,7 @@ function prochains(dicoUniques, groupesUniques,
     // 2. si oui, alors resultat.push(le reste )
     for (var i = 0; i < dicoUniques.length; i++) {
         mot = dicoUniques[i];
-        groupeActuel = groupesUniques[i];
+        groupeActuel = gUniques[i];
         if (groupeActuel[groupeActuel.length - 1] == mot) {
             resultat.push(mot);
         }
@@ -105,17 +135,51 @@ function obtenirMots(texte, n) {
 }
 
 
-/* commentaires explicatifs ici
- *
+/* cette fonction reçoit un tableau de mots [strings]
+ * et retourne tous les tableaux de n mots consécutifs
  */
-function grouper(mots, r) {
-    var vides = Array(r - 1).fill(""),
-        tableauComplet = vides.concat(mots),
+function grouper(mots, n) {
+    var vides = Array(n).fill(""),
+        tableauComplet = vides.concat(mots, vides),
         resultat = [];
 
-    for (var i = 0; i < mots.length; i++)
-        resultat.push(tableauComplet.slice(i, i + r))
+    for (var i = 0; i <= mots.length; i++)
+        resultat.push(tableauComplet.slice(i, i + n + 1))
     return resultat;
+}
+
+
+/* cette fonction reçoit un tableau de mots [strings]
+ * et retourne un tableau de la forme [string, string]
+ * 
+ * Le tableau retourné représente les n mots consécutifs,
+ * suivis du mot qui les suit.
+ *
+ * Les "mégaGroupes" obtenus ne sont pas nécessairement 
+ * uniques, au contraire, ils sont exhaustifs.
+ * */
+function megaGrouper(mots, n) {
+    var megaGroupes = grouper(mots, n),
+        resultat = megaGroupes.map(function (x) {
+            var i = debutPropre(x);
+            return [x.slice(i, x.length-1).join(" "), 
+                x.slice(-1)[0]];
+        });
+    return resultat;
+}
+
+
+/* Cette fonction reçoit un tableau [strings]
+ * et retourne le premier index où ce tableau ne commence pas
+ * par une chaine vide. Type du retour: number
+ */
+function debutPropre(tableau){
+    var i;
+    for (i = 0; i < tableau.length; i++) {
+        if (tableau[i] != "") 
+            break;
+    }
+    return i;
 }
 
 
@@ -195,16 +259,6 @@ function occurencesGroupes(groupes) {
 
 
 
-// pour la markov d'ordre 1, on a besoin:
-// 1. array de tous les mots (on l'a : mots)
-// 2. array des mots uniques (on l'a : dictionnaire)
-// 3. objet avec les nombres d'occurences de tous les mots
-// 4. array avec toutes les paires et groupes-r yeahhhhh
-// 5. array avec toutes les paires uniques
-// 6. objet avec les nombres d'occurences de toutes les paires
-// 7. TODO: en se basant sur l'occurence d'une paire donnée, 
-//          diviser par le total d'occurences du dernier mot ce qui donne sa proba
-// 8. TODO: généraliser à r 
 
 
 // TODO : compléter cette fonction
