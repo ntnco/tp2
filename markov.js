@@ -18,50 +18,68 @@ var writeFile = function (path, texte) {
 /* reçoit du texte : String
  * => retourne un tableau de tous les mots de ce texte : [Strings]
  */
-function obtenirPaires(texte, n) { // p-ê faire map ou autre coool chose
-    //Tu avais actually raison pour le bonus 
-    //On doit considérer la suite de r-mots qui vient
-    //avant comme un élément qui conditionne le mot 
-    //suivant
-    //
-    // intéressant! donc on va pas juste manipuler des matrices.
-
-    var mots = [];
-    var paires = [];
-    var motActuel = "";
-    var motPrecedent = "";
-    var precedent = " ";
-    var actuel = "";
-
-    var occurences = {}; // {mot1:#, mot2:#, mot3:#... motn:#}
-    
-    //var occurences = []
-    
+function obtenirMots(texte, n) { 
+    var mots = [],
+        motActuel = "",
+        actuel = "";
     for (var i = 0; i < texte.length; i++) {
         actuel = texte.charAt(i);
         if (estEspaceOuRetour(actuel)) {
-            if (!estEspaceOuRetour(precedent)){
+            if (!estEspaceOuRetour(precedent))
                 mots.push(motActuel);
-                paires.push([motPrecedent, motActuel])//Gosser pour rendre ca r
-                                                      // j'ai trouvé comment faire!
-                // s'agit de créer un array des n mots précédents, 
-                // puis quand on dépasse la longueur max on pop le premier élément.
-                // je peux le coder vendredi pm
-            }
-            motPrecedent = motActuel;
             motActuel = "";
         } else {
             motActuel += actuel;
-            if (i == texte.length - 1){
+            if (i == texte.length - 1)
                 mots.push(motActuel);
-                paires.push([motPrecedent, motActuel])
-            }
         }
         precedent = actuel;
     }
-    return [mots, paires];
-}//Est-ce que ça serait Weird de juste retourner les paires?
- ///// j'aime comment tu penses. ou des trios, des quatuors, des r-groupes :o  
+    return mots;
+}
+
+
+function grouper(mots, r) {
+    var vides = Array(r - 1).fill(""),
+        tableauComplet = vides.concat(mots),
+        resultat = [];
+
+    for (var i = 0; i < mots.length; i++)
+        resultat.push(tableauComplet.slice(i, i + r))
+
+    return resultat;
+}
+
+
+function groupesUniques(groupes) {
+    if (groupes[0].length == 1) 
+        return [...new Set(groupes)]; 
+    var resultat = groupes.filter(function(x, index, groupes) {
+        return groupes.indexOfArrays(x) == index
+    })
+    return resultat
+}
+
+
+// cette fonction donne l'index d'un sous-tableau dans un tableau 2D
+// elle ne devrait jamais retourner -1 dans les cadre de cet exercice.
+Array.prototype.indexOfArrays = function (sousTableau) {
+    for (var i = 0; i < this.length; i++) {
+        if (sontIdentiques(sousTableau, this[i]))
+            return i;
+    }     
+    return -1;
+}
+
+
+function sontIdentiques(tableau1, tableau2) {
+    for (var i = 0; i < tableau1.length; i++) {
+        if (tableau1[i] != tableau2[i])
+            return false;
+    }
+    return true;
+}
+
 
 
 // reçoit un caractère: String
@@ -83,8 +101,6 @@ var creerModele = function(texte) {
     var mots = obtenirMots(texte); // faut séparer sur les " " et les "\n"
 								//Pour le moment retourne un tableau [mots,paires]
 								//éventuellement[mots, (r+1)groupement]
-    var dictionnaire = uniques(mots[0]);//Juste traiter le premiertab
-								//nous revient le dico en ordre d'apparition
         
     var modele = markov(dictionnaire, mots[1]);//Je crois qu'on devrais
 											//juste lui envoyer les (r+1)groupements
@@ -94,12 +110,6 @@ var creerModele = function(texte) {
 };
 
 function uniques(tableau) {
-
-    // cette première opération sert aux bonus sur les ordres, donc
-    // au cas où les éléments du tableau sont eux-mêmes des tableaux.
-    var tabStrings = tableau.map(function(x) { 
-        return "" + x;
-    });
 
     var resultat = tabStrings.filter(function(mot, i, tabStrings){
         return tabStrings.indexOf(mot) === i;});
@@ -111,42 +121,14 @@ function uniques(tableau) {
 // 1. array de tous les mots (on l'a : mots)
 // 2. array des mots uniques (on l'a : dictionnaire)
 // 3. TODO: objet avec les nombres d'occurences de tous les mots
-// 4. array avec toutes les paires
+// 4. array avec toutes les paires et groupes-r yeahhhhh
 // 5. TODO: array avec toutes les paires uniques
 // 6. TODO: objet avec les nombres d'occurences de toutes les paires
 // 7. TODO: mettre tout ça ensemble et calculer les probas, ce qui 
 //          va nous donner le modèle à retourner.
 
-/*Pour le point 3, une fonction qui retourne les occurences? avec les 
-(r+1) groupements en paramètres et le dico. A chaque fois qu'un mot apparait */
-
 
 function markov(dictionnaire, mots) {
-
-    dictionnaire = "".concat(dictionnaire, "");//so ca ca rend notre dico qqchose
-	
-    //
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
