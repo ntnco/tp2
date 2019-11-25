@@ -136,7 +136,7 @@ function grouper(mots, n) {
 
 
 /* cette fonction reçoit un tableau de mots [strings]
- * et retourne un tableau de la forme [string, string]
+ * et retourne un tableau de la forme [[string, string]]
  * 
  * Le tableau retourné représente les n mots consécutifs,
  * suivis du mot qui les suit.
