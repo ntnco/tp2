@@ -3,9 +3,9 @@
 // Antoine Colson-Ratelle, 990432
 
 
-// 1. TODO: en se basant sur l'occurrence d'une paire donnée, 
-//          diviser par le total d'occurences du dernier mot
-//          ce qui donne sa prob: n
+// 1. TODO: commencer la fonction genererProchainMot()
+// 2. TODO: commencer la fonction genererPhrase()
+// 3. TODO: commencer la fonction genererParagraphes()
 
 
 /* C'est la fonction principale. Elle reçoit du texte : string 
