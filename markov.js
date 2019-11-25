@@ -6,8 +6,6 @@
 // 1. TODO: en se basant sur l'occurrence d'une paire donnée, 
 //          diviser par le total d'occurences du dernier mot
 //          ce qui donne sa prob: n
-// 2. TODO: pour une raison x, les prochains mots arrêtent de
-//          populer après un doublon. Réparer ça
 
 
 /* C'est la fonction principale. Elle reçoit du texte : string 
@@ -21,35 +19,67 @@ var creerModele = function(texte, r = 1) {
     var mots = obtenirMots(texte), // sépare sur les " " et les "\n"
         groupes = grouper(mots, r),
         megaGroupes = megaGrouper(mots, r),
-        gUniques = grouperUniques(groupes),
         modele = {};
         
-    modele.dictionnaire = toutSaufLesDerniers(gUniques);
-
-    var dicoUniques = motsUniques(mots),
-        cardinaliteMots = occurencesMots(mots),
-        cardinaliteGroupes = occurencesGroupes(groupes); 
-
-    console.log("megaGroupes");
-    console.table(megaGroupes);
-
+    modele.dictionnaire = toutSaufLesDerniers(groupes);
 
     modele.prochainsMots = trouverProchains(modele.dictionnaire, 
-        megaGroupes, cardinaliteMots, cardinaliteGroupes);
+        megaGroupes); // on rajoutera les cardinalités après
 
-    console.table(modele);
+    console.log("dictionnaire:")
+    console.table(modele.dictionnaire);
+    console.log("prochainsMots:")
+    console.table(modele.prochainsMots);
+
     return modele;
 };
 
 
-function trouverProchains() {
-    var resultat = {};
-
-
+Array.prototype.indexOfKey = function (clef){
+    for (var i = 0; i < this.length; i++)
+        if (this[i].mot == clef)
+            return i;
+    return -1;
 }
 
-/*
+
+/* Cette fonction reçoit 2 tableaux:
+ * 1. Le premier tableau contient des strings
+ * 2. Le deuxième tableau contient des paires de strings
+ *    Le 1er élément de la paire est les r éléments qui précèdent un mot
+ *    Le 2e élément de la paire est ce mot.
  *
+ * Elle retourne un tableau d'enregistrements en comptant les occurences 
+ * du 2e élément du 2e tableau.
+ */
+function trouverProchains(dico, megaGroupes) {
+    var resultat = [],
+        compte = 0,
+        i = 0,
+        bonIndex;
+    for (mot of dico) {
+        resultat.push([]);
+        for (paire of megaGroupes) {
+            if (paire[0] == mot) {
+                compte++
+                bonIndex = resultat[i].indexOfKey(paire[1]);
+                if (bonIndex == -1) {
+                    resultat[i].push({mot:paire[1], prob:1});
+                } else {
+                    resultat[i][bonIndex].prob++;
+                }
+            }
+        }
+        for (var j = 0; j < resultat[i].length; j++) {
+            resultat[i][j].prob /= compte;
+        }
+        compte = 0;
+        i++;
+    }
+    return resultat;
+}
+
+/* INUTILISÉE. à deleter.
  */
 function grouperSimple(tableau) {
     return tableau.map(function (x) {
@@ -183,6 +213,9 @@ function debutPropre(tableau){
 }
 
 
+/* Cette fonction prend un tableau 2D : [[strings]]
+ * et retourne les tableaux uniques qu'il contient : [[strings]]
+ */
 function grouperUniques(groupes) {
     if (groupes[0].length == 1) 
         return [...new Set(groupes)]; 
