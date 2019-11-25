@@ -12,16 +12,50 @@
  */
 var creerModele = function(texte, r = 2) {
     var mots = obtenirMots(texte), // sépare sur les " " et les "\n"
-        dictionnaire = motsUniques(mots), 
+        dicoUniques = motsUniques(mots), // grouperUniques de taille r-1 
         groupes = grouper(mots, r),
-        groupesUniques = grouperUniques(groupes),
+        groupesUniques = reEspacer(grouperUniques(groupes)),
         cardinaliteMots = occurencesMots(mots),
         cardinaliteGroupes = occurencesGroupes(groupes); 
 
+    var modele = {};
+    modele.dictionnaire = groupesUniques
+        .slice(0, groupesUniques.length - 1)
+        .join(" ");
+    modele.prochainsMots = prochains(dictionnaire, groupesUniques, 
+        cardinaliteMots, cardinaliteGroupes)
 
-    return "yop";
+    return modele;
 };
 
+function reEspacer(groupes)
+    var tableauUniques = groupes.map(function (x) {
+        return x.split(" ");
+    });
+    return tableauUniques;
+}
+
+
+
+function prochains(dicoUniques, groupesUniques, 
+    cardinaliteMots, cardinaliteGroupes) {
+
+    var resultat = [], 
+        mot;
+
+    // cette boucle check 
+    // 1. si le mot est le dernier du groupe unique de même index
+    // 2. si oui, alors resultat.push(le reste )
+    for (var i = 0; i < dictionnaire.length; i++) {
+        mot = dictionnaire[i];
+        groupeActuel = groupesUniques[i];
+        if (groupeActuel[groupeActuel.length - 1] == mot) {
+            resultat
+        }
+    }
+
+    return resultat; 
+}
 
 
 // Utilitaires pour manipuler des fichiers
