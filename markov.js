@@ -6,6 +6,9 @@
 // 1. TODO: commencer la fonction genererProchainMot()
 // 2. TODO: commencer la fonction genererPhrase()
 // 3. TODO: commencer la fonction genererParagraphes()
+// 
+// 4. TODO: une fois que ces fonctions sont codées, on verra si
+//          le code qu'on a déjà fonctionne même avec ordre-r
 
 
 /* C'est la fonction principale. Elle reçoit du texte : string 
@@ -24,12 +27,10 @@ var creerModele = function(texte, r = 1) {
     modele.dictionnaire = toutSaufLesDerniers(groupes);
 
     modele.prochainsMots = trouverProchains(modele.dictionnaire, 
-        megaGroupes); // on rajoutera les cardinalités après
+        megaGroupes);
 
-    console.log("dictionnaire:")
-    console.table(modele.dictionnaire);
-    console.log("prochainsMots:")
-    console.table(modele.prochainsMots);
+    console.log("dictionnaire:"); console.table(modele.dictionnaire);
+    console.log("prochainsMots:"); console.table(modele.prochainsMots);
 
     return modele;
 };
