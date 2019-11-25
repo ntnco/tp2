@@ -2,6 +2,28 @@
 // Emma Parent-Senez, 20071506
 // Antoine Colson-Ratelle, 990432
 
+
+
+/* cette fonction reçoit du texte et 
+ * 1. en sépare les mots
+ * 2. obtient les mots uniques
+ * 3. appelle markov() pour obtenir un modèle de markov
+ * 4. retourne le modèle
+ */
+var creerModele = function(texte, r = 2) {
+    var mots = obtenirMots(texte), // sépare sur les " " et les "\n"
+        dictionnaire = motsUniques(mots), 
+        groupes = grouper(mots, r),
+        groupesUniques = grouperUniques(groupes),
+        cardinaliteMots = occurencesMots(mots),
+        cardinaliteGroupes = occurencesGroupes(groupes); 
+
+
+    return "yop";
+};
+
+
+
 // Utilitaires pour manipuler des fichiers
 var fs = require("fs");
 
@@ -42,7 +64,7 @@ function obtenirMots(texte, n) {
 /* commentaires explicatifs ici
  *
  */
-function grouper(mots, r ) {
+function grouper(mots, r) {
     var vides = Array(r - 1).fill(""),
         tableauComplet = vides.concat(mots),
         resultat = [];
@@ -53,7 +75,7 @@ function grouper(mots, r ) {
 }
 
 
-function groupesUniques(groupes) {
+function grouperUniques(groupes) {
     if (groupes[0].length == 1) 
         return [...new Set(groupes)]; 
     var resultat = groupes.filter(function(x, index, groupes) {
@@ -83,7 +105,6 @@ function sontIdentiques(tableau1, tableau2) {
 }
 
 
-
 // reçoit un caractère: String
 // => retourne si c'est un espace: Bool
 function estEspaceOuRetour(caract) {
@@ -92,25 +113,12 @@ function estEspaceOuRetour(caract) {
 
 
 
-/* cette fonction reçoit du texte et 
- * 1. en sépare les mots
- * 2. obtient les mots uniques
- * 3. appelle markov() pour obtenir un modèle de markov
- * 4. retourne le modèle
- */
-var creerModele = function(texte, r = 2) {
-    var mots = obtenirMots(texte), // sépare sur les " " et les "\n"
-        dictionnaire = motsUniques(mots),
-        groupes = grouper(mots);
-
-    return modele;
-};
 
 
 function motsUniques(tableau) {
 
-    var resultat = tabStrings.filter(function(mot, i, tabStrings){
-        return tabStrings.indexOf(mot) === i;
+    var resultat = tableau.filter(function(mot, i, tableau){
+        return tableau.indexOf(mot) === i;
     });
     return resultat;
 }
