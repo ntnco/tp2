@@ -37,7 +37,7 @@ var creerModele = function(texte, r = 1) {
 
 
 /* Cette méthode cherche un mot dans un tableau d'enregistrements
- * Elle retourne l'index du mot ciblé. 
+ * Elle retourne l'index de l'enregistrement contenant le mot ciblé. 
  */
 Array.prototype.indexOfMot = function (motCible){
     for (var i = 0; i < this.length; i++)
@@ -249,15 +249,6 @@ var genererParagraphes = function(modele, nbParagraphes, maxNbPhrases, maxNbMots
 };
 
 
-if (require.main === module) {
-    // Si on se trouve ici, alors le fichier est exécuté via : nodejs gen.js
-    tests(); // On lance les tests
-} else {
-    /* Sinon, le fichier est inclus depuis index.js
-       On exporte les fonctions importantes pour le serveur web */
-    exports.creerModele = creerModele;
-    exports.genererParagraphes = genererParagraphes;
-}
 
 
 // Utilitaires pour manipuler des fichiers
@@ -277,9 +268,72 @@ var tests = function() {
     fichier avec :
        node markov.js
        */
+    
+    // tests pour creerModele()
+    console.assert(JSON.stringify(creerModele("no more tacos")) ==
+        '{"dictionnaire":["","no","more","tacos"],'+
+        '"prochainsMots":[[{"mot":"no","prob":1}],[{"mot":"more","prob":1}],'+
+        '[{"mot":"tacos","prob":1}],[{"mot":"","prob":1}]]}');
 
+    // tests pour Array.prototype.indexOfMot()
+    console.assert([{mot: "hey", prob: 2}, {mot: "taco", prob: 3}]
+        .indexOfMot("hey") == 0);
+    console.assert([{mot: "hey", prob: 2}, {mot: "taco", prob: 3}]
+        .indexOfMot("taco") == 1);
+
+    // tests pour Array.prototype.indexOfArrays
+    console.assert(true);
+
+    // tests pour trouverProchains()
+    console.assert(true);
+
+    // tests pour toutSaufLesDerniers()
+    console.assert(true);
+
+    // tests pour obtenirMots()
+    console.assert(true);
+
+    // tests pour grouper(mots, n)
+    console.assert(true);
+
+    // tests pour megaGrouper(mots, n)
+    console.assert(true);
+
+    // tests pour debutPropre(tableau)
+    console.assert(true);
+ 
+    // tests pour grouperUniques(groupes)
+    console.assert(true);
+
+    // tests pour sontIdentiques(tableau1, tableau2)
+    console.assert(true);
+
+    // tests pour motsUniques(tableau)
+    console.assert(true);
+
+    // tests pour genererProchainMot
+    console.assert(true);
+
+    // tests pour genererPhrase
+    console.assert(true);
+
+    // tests pour genererParagraphes
+    console.assert(true);
+
+    // tests pour estEspaceOuRetour()
     console.assert(estEspaceOuRetour(" ") == true);
     console.assert(estEspaceOuRetour("\n") == true);
     console.assert(estEspaceOuRetour("a") == false);
     console.assert(estEspaceOuRetour("0") == false);
 };
+
+
+if (require.main === module) {
+    // Si on se trouve ici, alors le fichier est exécuté via : nodejs gen.js
+    tests(); // On lance les tests
+} else {
+    /* Sinon, le fichier est inclus depuis index.js
+       On exporte les fonctions importantes pour le serveur web */
+    exports.creerModele = creerModele;
+    exports.genererParagraphes = genererParagraphes;
+}
