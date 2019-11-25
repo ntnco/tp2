@@ -100,22 +100,22 @@ function toutSaufLesDerniers(tableau) {
 /* reçoit du texte : String
  * => retourne un tableau de tous les mots de ce texte : [Strings]
  */
-function obtenirMots(texte, n) { 
+function obtenirMots(texte, n) { //A quoi sers n???
     var mots = [],
         motActuel = "",
         actuel = "";
     for (var i = 0; i < texte.length; i++) {
         actuel = texte.charAt(i);
-        if (estEspaceOuRetour(actuel)) {
+        if (estEspaceOuRetour(actuel)) {  			//Endroit ou on split notre texte en tab de mots
             if (!estEspaceOuRetour(precedent))
                 mots.push(motActuel);
             motActuel = "";
         } else {
             motActuel += actuel;
             if (i == texte.length - 1)
-                mots.push(motActuel);
+                mots.push(motActuel);				//Clearly need help
         }
-        precedent = actuel;
+        precedent = actuel;							//What is precedent
     }
     return mots;
 }
@@ -160,7 +160,7 @@ function megaGrouper(mots, n) {
  * et retourne le premier index où ce tableau ne commence pas
  * par une chaine vide. Type du retour: number
  */
-function debutPropre(tableau){
+function debutPropre(tableau){						//A tuer?
     var i;
     for (i = 0; i < tableau.length; i++) {
         if (tableau[i] != "") 
@@ -223,9 +223,17 @@ function motsUniques(tableau) {
 }
 
 
-// TODO : compléter cette fonction
+// TODO : compléter cette fonction				Continuer ici
 var genererProchainMot = function(modele, motActuel) {
-
+	//On va chercher l'indice de motActuel en parcourant le dictionnaire
+	
+	var index = modele.dictionnaire.indexOf(motActuel);
+	var prochainsMotsPossibles = modele.prochainsMots[index];
+	var uniforme01= Math.random;
+	
+	
+	
+	
 };
 
 
