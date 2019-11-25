@@ -160,26 +160,13 @@ function megaGrouper(mots, n) {
  * et retourne le premier index où ce tableau ne commence pas
  * par une chaine vide. Type du retour: number
  */
-function debutPropre(tableau){						//A tuer?
+function debutPropre(tableau){			//se fait appeler par mégaGroupes
     var i;
     for (i = 0; i < tableau.length; i++) {
         if (tableau[i] != "") 
             break;
     }
     return i;
-}
-
-
-/* Cette fonction prend un tableau 2D : [[strings]]
- * et retourne les tableaux uniques qu'il contient : [[strings]]
- */
-function grouperUniques(groupes) {
-    if (groupes[0].length == 1) 
-        return [...new Set(groupes)]; 
-    var resultat = groupes.filter(function(x, index, groupes) {
-        return groupes.indexOfArrays(x) == index
-    })
-    return resultat
 }
 
 
@@ -197,8 +184,10 @@ Array.prototype.indexOfArrays = function (sousTableau) {
 // cette fonction retourne une Bool qui indique si les 2 tableaux
 // passés en arguments ont les mêmes valeurs.
 function sontIdentiques(tableau1, tableau2) {
+    if (tableau1.length != tableau2.length)
+        return false; // permet de gérer les tableaux vides.
     for (var i = 0; i < tableau1.length; i++) {
-        if (tableau1[i] != tableau2[i])
+        if (tableau1[i] !== tableau2[i]) // doivent être de même type
             return false;
     }
     return true;
@@ -209,17 +198,6 @@ function sontIdentiques(tableau1, tableau2) {
 // => retourne si c'est un espace: Bool
 function estEspaceOuRetour(caract) {
     return (caract == " " || caract == "\n"); 
-}
-
-
-// cette fonction retourne les mots uniques du tableau qu'elle reçoit.
-// input: [strings]
-// output: [strings]
-function motsUniques(tableau) {
-    var resultat = tableau.filter(function(mot, i, tableau){
-        return tableau.indexOf(mot) === i;
-    });
-    return resultat;
 }
 
 
@@ -282,41 +260,56 @@ var tests = function() {
         '"prochainsMots":[[{"mot":"no","prob":1}],[{"mot":"more","prob":1}],'+
         '[{"mot":"tacos","prob":1}],[{"mot":"","prob":1}]]}');
 
-    // tests pour Array.prototype.indexOfMot()
+    // tests pour la méthode Array.prototype.indexOfMot()
     console.assert([{mot: "hey", prob: 2}, {mot: "taco", prob: 3}]
         .indexOfMot("hey") == 0);
     console.assert([{mot: "hey", prob: 2}, {mot: "taco", prob: 3}]
         .indexOfMot("taco") == 1);
 
-    // tests pour Array.prototype.indexOfArrays
-    console.assert(true);
+    // tests pour la méthode Array.prototype.indexOfArrays
+    console.assert([["u", ""], ["a", 0], ["hum"]].indexOfArrays(["hum"]) == 2,
+    new Error().stack);
+    console.assert([["u", ""], ["a", 0], ["hum"]].indexOfArrays(["u", ""]) == 0,
+    new Error().stack);
+    console.assert([["u", ""], ["a", 0], ["hum"]].indexOfArrays(["a", 0]) == 1,
+    new Error().stack);
+    console.assert([[], [0], ["zéro"]].indexOfArrays([]) == 0);
+    console.assert([[0], [], []].indexOfArrays([]) == 1);
 
-    // tests pour trouverProchains()
-    console.assert(true);
+    // tests pour trouverProchains(dico, megaGroupes)
+    console.assert(JSON.stringify(trouverProchains(["", "hey", "yaa"], 
+        [["", "lalala"], ["hey", "yaa"], ["hey", "naa"], ["yaa", ""]])) == 
+        '[[{"mot":"lalala","prob":1}],[{"mot":"yaa","prob":0.5},' +
+        '{"mot":"naa","prob":0.5}],[{"mot":"","prob":1}]]');
 
     // tests pour toutSaufLesDerniers()
-    console.assert(true);
+    console.assert("" + toutSaufLesDerniers([["", "b"], ["sponge", "bob"]]) == 
+        ",sponge");
 
     // tests pour obtenirMots()
-    console.assert(true);
+    console.assert("" + obtenirMots("ah que la neige a neigé") == 
+        "ah,que,la,neige,a,neigé");
 
     // tests pour grouper(mots, n)
-    console.assert(true);
+    console.assert("" + grouper(["ah", "que", "bonjour"], 1) == 
+        ",ah,ah,que,que,bonjour,bonjour,");
+    console.assert("" + grouper(["ah", "que", "bonjour"], 2) == 
+        ",,ah,,ah,que,ah,que,bonjour,que,bonjour,");
 
     // tests pour megaGrouper(mots, n)
-    console.assert(true);
+    console.assert("" + megaGrouper(["ah", "que", "bonjour"], 1) == 
+        ",ah,ah,que,que,bonjour,bonjour,", 
+        new Error().stack); // output pareil à celui de grouper()
+    console.assert("" + megaGrouper(["ah", "que", "bonjour"], 2) ==
+        ',ah,ah,que,ah que,bonjour,que bonjour,', 
+        new Error().stack); // output *différent* de celui de grouper()
 
     // tests pour debutPropre(tableau)
-    console.assert(true);
- 
-    // tests pour grouperUniques(groupes)
-    console.assert(true);
+    console.assert(debutPropre(["", "", "", "helloooooow"]) == 3);
 
     // tests pour sontIdentiques(tableau1, tableau2)
-    console.assert(true);
-
-    // tests pour motsUniques(tableau)
-    console.assert(true);
+    console.assert(sontIdentiques([], []));
+    console.assert(sontIdentiques(["Barack Obama"], ["Barack Obama"]));
 
     // tests pour genererProchainMot
     console.assert(true);
