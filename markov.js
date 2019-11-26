@@ -6,8 +6,8 @@
 // Roadmap
 // 1. commencer la fonction genererProchainMot()
 // 2. commencer la fonction genererPhrase()
-// 3. TODO: commencer la fonction genererParagraphes()
-// 
+// 3. commencer la fonction genererParagraphes()
+// 4. TODO: s'assurer que 1 à 3 fonctionnent bien avec les données wiki
 // 4. TODO: une fois que ces fonctions sont codées, on verra si
 //          le code qu'on a déjà fonctionne même avec ordre-r
 
