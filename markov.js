@@ -26,7 +26,6 @@ var creerModele = function(texte, r = 1) {
         modele = {};
 
     modele.dictionnaire = toutSaufLesDerniers(groupes);
-
     modele.prochainsMots = trouverProchains(modele.dictionnaire, 
         megaGroupes);
 
@@ -68,8 +67,6 @@ function trouverProchains(dico, megaGroupes) {
         i = 0,
         bonIndex;
 
-    // tu peux en apprendre plus sur for...of
-    // ici: https://mzl.la/2qI1t5t
     for (mot of dico) {  
         resultat.push([]);
         for (paire of megaGroupes) {
@@ -208,28 +205,37 @@ function estEspaceOuRetour(caract) {
 
 // Cette fonction obtient l'indice de motActuel en parcourant le dictionnaire
 var genererProchainMot = function(modele, motActuel) {
-    var prochainMot = "",
-        index = modele.dictionnaire.indexOf(motActuel),
+    var index = modele.dictionnaire.indexOf(motActuel),
         prochainsPossibles = modele.prochainsMots[index],
         nombreHasard = Math.random(), 
         cumul = 0;
 
-    for (motPossible of prochainsPossibles) {
-        cumul += motPossible.prob;
-        console.log(cumul);
-        if(cumul > nombreHasard){
-            prochainMot = motPossible.mot;
-            return prochainMot;
-        } 
+    for (option of prochainsPossibles) {
+        cumul += option.prob;
+        if (cumul > nombreHasard)
+            return option.mot;
     }
-    // exemple d'appel
-    // genererProchainMot(creerModele("Je suis le plus taco des taco, j'aime tous le taco du monde et je taco taco avec toi taco"),"taco")
 };
+// exemple d'appel de genererProchainMot:
+// genererProchainMot(modeleTaco, "taco")
+
+var modeleTaco = creerModele("Je suis le plus taco des taco, j'aime tous le taco du monde et je taco taco avec toi taco");
 
 
 // TODO : compléter cette fonction
 var genererPhrase = function(modele, maxNbMots) {
+    var prochainMot,
+        phrase = [];
+        motActuel = "";
 
+    for (var i = 0; i < maxNbMots; i++) {
+        prochainMot = genererProchainMot(modele, motActuel);
+        if (prochainMot == "")
+            break;
+        phrase.push(prochainMot);
+        motActuel = prochainMot;
+    }
+    return phrase.join(" ");
 };
 
 
@@ -237,8 +243,6 @@ var genererPhrase = function(modele, maxNbMots) {
 var genererParagraphes = function(modele, nbParagraphes, maxNbPhrases, maxNbMots) {
 
 };
-
-
 
 
 // Utilitaires pour manipuler des fichiers
@@ -334,7 +338,7 @@ var tests = function() {
 
 
 if (require.main === module) {
-    // Si on se trouve ici, alors le fichier est exécuté via : nodejs gen.js
+    // Si on se trouve ici, alors le fichier est exécuté via : nodejs markov.js
     tests(); // On lance les tests
 } else {
     /* Sinon, le fichier est inclus depuis index.js
