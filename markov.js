@@ -3,7 +3,8 @@
 // Antoine Colson-Ratelle, 990432
 
 
-// 1. TODO: commencer la fonction genererProchainMot()
+// Roadmap
+// 1. commencer la fonction genererProchainMot()
 // 2. TODO: commencer la fonction genererPhrase()
 // 3. TODO: commencer la fonction genererParagraphes()
 // 
@@ -97,25 +98,30 @@ function toutSaufLesDerniers(tableau) {
 }
 
 
-/* reçoit du texte : String
- * => retourne un tableau de tous les mots de ce texte : [Strings]
+/* reçoit du texte : string
+ * => retourne un tableau de tous les mots de ce texte : [strings]
+ *
+ * fonctionnement: traverse chaque caractère et les ajoute à la 
+ * variable motActuel. Lorsqu'elle frappe une espace ou un retour à la ligne,
+ * elle pousse motActuel dans le tableau des mots à retourner, puis 
+ * réassigne motActuel à une string vide "".
  */
-function obtenirMots(texte, n) { //A quoi sers n???
+function obtenirMots(texte) { 
     var mots = [],
         motActuel = "",
-        actuel = "";
+        caracActuel, caracPrecedent;
     for (var i = 0; i < texte.length; i++) {
-        actuel = texte.charAt(i);
-        if (estEspaceOuRetour(actuel)) {  			//Endroit ou on split notre texte en tab de mots
-            if (!estEspaceOuRetour(precedent))
-                mots.push(motActuel);
+        caracActuel = texte.charAt(i);
+        if (estEspaceOuRetour(caracActuel)) {  // si " " ou "\n" 
+            if (!estEspaceOuRetour(caracPrecedent)) 
+                mots.push(motActuel); // car fin du mot
             motActuel = "";
         } else {
-            motActuel += actuel;
+            motActuel += caracActuel;
             if (i == texte.length - 1)
-                mots.push(motActuel);				//Clearly need help
+                mots.push(motActuel); // car fin du texte
         }
-        precedent = actuel;							//What is precedent
+        caracPrecedent = caracActuel;
     }
     return mots;
 }
@@ -160,12 +166,11 @@ function megaGrouper(mots, n) {
  * et retourne le premier index où ce tableau ne commence pas
  * par une chaine vide. Type du retour: number
  */
-function debutPropre(tableau){			//se fait appeler par mégaGroupes
+function debutPropre(tableau){ //se fait appeler par megaGroupes
     var i;
-    for (i = 0; i < tableau.length; i++) {
+    for (i = 0; i < tableau.length; i++)
         if (tableau[i] != "") 
             break;
-    }
     return i;
 }
 
@@ -201,24 +206,24 @@ function estEspaceOuRetour(caract) {
 }
 
 
-// TODO : compléter cette fonction				Continuer ici
+// Cette fonction obtient l'indice de motActuel en parcourant le dictionnaire
 var genererProchainMot = function(modele, motActuel) {
-	//On va chercher l'indice de motActuel en parcourant le dictionnaire
-	var motMaintenant=""
-	var index = modele.dictionnaire.indexOf(motActuel);
-	var prochainsMotsPossibles = modele.prochainsMots[index];
-	var uniforme01= Math.random(), cummul=0;
-	for(motPossible of prochainsMotsPossibles){
-		cummul+=motPossible.prob;
-		console.log(cummul);
-		if(cummul>uniforme01){
-			motMaintenant=motPossible.mot;
-			return motMaintenant;
-		}
-		
-	}
-	// genererProchainMot(creerModele("Je suis le plus taco des taco, j'aime tous le taco du monde et je taco taco avec toi taco"),"taco")
-	
+    var prochainMot = "",
+        index = modele.dictionnaire.indexOf(motActuel),
+        prochainsPossibles = modele.prochainsMots[index],
+        nombreHasard = Math.random(), 
+        cumul = 0;
+
+    for (motPossible of prochainsPossibles) {
+        cumul += motPossible.prob;
+        console.log(cumul);
+        if(cumul > nombreHasard){
+            prochainMot = motPossible.mot;
+            return prochainMot;
+        } 
+    }
+    // exemple d'appel
+    // genererProchainMot(creerModele("Je suis le plus taco des taco, j'aime tous le taco du monde et je taco taco avec toi taco"),"taco")
 };
 
 
