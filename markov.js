@@ -5,7 +5,7 @@
 
 // Roadmap
 // 1. commencer la fonction genererProchainMot()
-// 2. TODO: commencer la fonction genererPhrase()
+// 2. commencer la fonction genererPhrase()
 // 3. TODO: commencer la fonction genererParagraphes()
 // 
 // 4. TODO: une fois que ces fonctions sont codées, on verra si
@@ -110,6 +110,8 @@ function obtenirMots(texte) {
     for (var i = 0; i < texte.length; i++) {
         caracActuel = texte.charAt(i);
         if (estEspaceOuRetour(caracActuel)) {  // si " " ou "\n" 
+            if (caracActuel == "\n")
+                mots.push(""); // signale un début et une fin de phrase
             if (!estEspaceOuRetour(caracPrecedent)) 
                 mots.push(motActuel); // car fin du mot
             motActuel = "";
@@ -222,7 +224,6 @@ var genererProchainMot = function(modele, motActuel) {
 var modeleTaco = creerModele("Je suis le plus taco des taco, j'aime tous le taco du monde et je taco taco avec toi taco");
 
 
-// TODO : compléter cette fonction
 var genererPhrase = function(modele, maxNbMots) {
     var prochainMot,
         phrase = [];
@@ -232,6 +233,8 @@ var genererPhrase = function(modele, maxNbMots) {
         prochainMot = genererProchainMot(modele, motActuel);
         if (prochainMot == "")
             break;
+        if (i == maxNbMots - 1)
+            prochainMot += ".";
         phrase.push(prochainMot);
         motActuel = prochainMot;
     }
@@ -241,7 +244,20 @@ var genererPhrase = function(modele, maxNbMots) {
 
 // TODO : compléter cette fonction
 var genererParagraphes = function(modele, nbParagraphes, maxNbPhrases, maxNbMots) {
+    var paragraphes = [],
+        paragraphe = [],
+        phrase = "";
 
+    for (var i = 0; i < nbParagraphes; i++) {
+        for (var j = 0; j < maxNbPhrases; j++) {
+            phrase = genererPhrase(modele, maxNbMots);
+            paragraphe.push(phrase);
+        }
+        paragraphes.push(paragraphe.join(" "));
+        paragraphe = []
+    }
+
+    return paragraphes.join("\n");
 };
 
 
