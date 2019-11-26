@@ -127,7 +127,7 @@ function obtenirMots(texte) {
 
 
 /* cette fonction reçoit un tableau de mots [strings]
- * et retourne tous les tableaux de n mots consécutifs
+ * et retourne tous les tableaux de n mots consécutifs [[strings]]
  */
 function grouper(mots, n) {
     var vides = Array(n).fill(""),
@@ -149,7 +149,7 @@ function grouper(mots, n) {
  * Les "mégaGroupes" obtenus ne sont pas nécessairement 
  * uniques, au contraire, ils sont exhaustifs. Ça permettra
  * de compter les occurences de leur mot final plus tard.
- * */
+ */
 function megaGrouper(mots, n) {
     var megaGroupes = grouper(mots, n),
         resultat = megaGroupes.map(function (x) {
@@ -220,7 +220,6 @@ var genererProchainMot = function(modele, motActuel) {
 };
 // exemple d'appel de genererProchainMot:
 // genererProchainMot(modeleTaco, "taco")
-
 var modeleTaco = creerModele("Je suis le plus taco des taco, j'aime tous le taco du monde et je taco taco avec toi taco");
 
 
@@ -242,7 +241,8 @@ var genererPhrase = function(modele, maxNbMots) {
 };
 
 
-// TODO : compléter cette fonction
+/* Cette fonction reçoit un modèle (objet) et 3 nombres.
+ * Elle retourne une String
 var genererParagraphes = function(modele, nbParagraphes, maxNbPhrases, maxNbMots) {
     var paragraphes = [],
         paragraphe = [],
@@ -254,7 +254,7 @@ var genererParagraphes = function(modele, nbParagraphes, maxNbPhrases, maxNbMots
             paragraphe.push(phrase);
         }
         paragraphes.push(paragraphe.join(" "));
-        paragraphe = []
+        paragraphe = [];
     }
 
     return paragraphes.join("\n");
@@ -275,9 +275,9 @@ var writeFile = function (path, texte) {
 
 var tests = function() {
     /* Les tests seront lancés automatiquement si vous appelez ce
-    fichier avec :
-       node markov.js
-       */
+     * fichier avec : 
+     * node markov.js
+     */
     
     // tests pour creerModele()
     console.assert(JSON.stringify(creerModele("no more tacos")) ==
@@ -336,14 +336,8 @@ var tests = function() {
     console.assert(sontIdentiques([], []));
     console.assert(sontIdentiques(["Barack Obama"], ["Barack Obama"]));
 
-    // tests pour genererProchainMot
-    console.assert(true);
-
-    // tests pour genererPhrase
-    console.assert(true);
-
-    // tests pour genererParagraphes
-    console.assert(true);
+    // à noter que les fonctions qui génèrent des mots/phrases/paragraphes
+    // ne sont pas à tester, car elles contiennent des données aléatoires.
 
     // tests pour estEspaceOuRetour()
     console.assert(estEspaceOuRetour(" ") == true);
