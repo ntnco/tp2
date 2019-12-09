@@ -28,7 +28,10 @@ var creerModele = function(texte, r = 1) {
     modele.dictionnaire = toutSaufLesDerniers(groupes);
     modele.prochainsMots = trouverProchains(modele.dictionnaire, 
         megaGroupes);
-
+	
+	console.log(mots);
+	console.table(groupes);
+	console.table(megaGroupes);
     console.log("dictionnaire:"); console.table(modele.dictionnaire);
     console.log("prochainsMots:"); console.table(modele.prochainsMots);
 
@@ -110,11 +113,11 @@ function obtenirMots(texte) {
     for (var i = 0; i < texte.length; i++) {
         caracActuel = texte.charAt(i);
         if (estEspaceOuRetour(caracActuel)) {  // si " " ou "\n" 
-            if (caracActuel == "\n")
-                mots.push(""); // signale un début et une fin de phrase
             if (!estEspaceOuRetour(caracPrecedent)) 
                 mots.push(motActuel); // car fin du mot
-            motActuel = "";
+				motActuel = "";
+			if (caracActuel == "\n")
+                mots.push(""); // signale un début et une fin de phrase
         } else {
             motActuel += caracActuel;
             if (i == texte.length - 1)
@@ -122,6 +125,7 @@ function obtenirMots(texte) {
         }
         caracPrecedent = caracActuel;
     }
+
     return mots;
 }
 
@@ -222,6 +226,8 @@ var genererProchainMot = function(modele, motActuel) {
 // exemple d'appel de genererProchainMot:
 // genererProchainMot(modeleTaco, "taco")
 var modeleTaco = creerModele("Je suis le plus taco des taco, j'aime tous le taco du monde et je taco taco avec toi taco");
+var modeleTest = creerModele('A B C.\nA B A.\nC B A.');
+genererParagraphes(modeleTest,3,3,10);
 
 
 var genererPhrase = function(modele, maxNbMots) {
