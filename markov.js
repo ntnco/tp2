@@ -54,7 +54,7 @@ Array.prototype.indexOfMot = function (motCible){
  *    Le 2e élément de la paire est ce mot.
  *
  * Elle retourne un tableau d'enregistrements en comptant les occurences 
- * du 2e élément du 2e tableau.
+ * (Probas?)du 2e élément du 2e tableau.
  *
  * Pour comprendre le fonctionnement de cette fonction, il est important
  * de savoir que l'argument megaGroupes contient des paires de 2 strings:
@@ -87,10 +87,10 @@ function trouverProchains(dico, megaGroupes) {
     return resultat;
 }
 
-
+//
 function toutSaufLesDerniers(tableau) {
-    return [...new Set(tableau.map(function (e) {
-        return e.slice(0, e.length - 1).join(" ");
+    return [...new Set(tableau.map(function (elem) {
+        return elem.slice(0, elem.length - 1).join(" ");
     }))];
 }
 
