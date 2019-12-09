@@ -175,7 +175,7 @@ function debutPropre(tableau){ //se fait appeler par megaGroupes
 
 
 // cette fonction donne l'index d'un sous-tableau dans un tableau 2D
-// elle ne devrait jamais retourner -1 dans les cadre de cet exercice.
+// elle ne devrait jamais retourner -1 dans le cadre de cet exercice.
 Array.prototype.indexOfArrays = function (sousTableau) {
     for (var i = 0; i < this.length; i++) {
         if (sontIdentiques(sousTableau, this[i]))
@@ -244,6 +244,7 @@ var genererPhrase = function(modele, maxNbMots) {
 
 /* Cette fonction reçoit un modèle (objet) et 3 nombres.
  * Elle retourne une String
+ */
 var genererParagraphes = function(modele, nbParagraphes, maxNbPhrases, maxNbMots) {
     var paragraphes = [],
         paragraphe = [],
