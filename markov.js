@@ -244,6 +244,7 @@ var genererPhrase = function(modele, maxNbMots) {
 
 /* Cette fonction reçoit un modèle (objet) et 3 nombres.
  * Elle retourne une String
+ */
 var genererParagraphes = function(modele, nbParagraphes, maxNbPhrases, maxNbMots) {
     var paragraphes = [],
         paragraphe = [],
