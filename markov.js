@@ -43,114 +43,7 @@ Array.prototype.indexOfMot = function (motCible){
     for (var i = 0; i < this.length; i++)
         if (this[i].mot == motCible)
             return i;
-    return -1;
-}
-
-
-/* Cette fonction reçoit 2 tableaux:
- * 1. Le premier tableau contient des strings
- * 2. Le deuxième tableau contient des paires de strings
- *    Le 1er élément de la paire est les r éléments qui précèdent un mot
- *    Le 2e élément de la paire est ce mot.
- *
- * Elle retourne un tableau d'enregistrements en comptant les occurences 
- * du 2e élément du 2e tableau.
- *
- * Pour comprendre le fonctionnement de cette fonction, il est important
- * de savoir que l'argument megaGroupes contient des paires de 2 strings:
- * a) la 1re string contient les mots précédents
- * b) la 2e string contient le mot actuel.
- */
-function trouverProchains(dico, megaGroupes) {
-    var resultat = [],
-        compte = 0,
-        i = 0,
-        bonIndex;
-
-    for (mot of dico) {  
-        resultat.push([]);
-        for (paire of megaGroupes) {
-            if (paire[0] == mot) {
-                compte++; // servira à calculer la prob du mot
-                bonIndex = resultat[i].indexOfMot(paire[1]); //cherche paire[1]
-                if (bonIndex == -1)
-                    resultat[i].push({mot:paire[1], prob:1});
-                else
-                    resultat[i][bonIndex].prob++;
-            }
-        }
-        for (var j = 0; j < resultat[i].length; j++)
-            resultat[i][j].prob /= compte; // calcule la prob du mot
-        compte = 0;
-        i++;
-    }
-    return resultat;
-}
-
-
-function toutSaufLesDerniers(tableau) {
-    return [...new Set(tableau.map(function (e) {
-        return e.slice(0, e.length - 1).join(" ");
-    }))];
-}
-
-
-/* reçoit du texte : string
- * => retourne un tableau de tous les mots de ce texte : [strings]
- *
- * fonctionnement: traverse chaque caractère et les ajoute à la 
- * variable motActuel. Lorsqu'elle frappe une espace ou un retour à la ligne,
- * elle pousse motActuel dans le tableau des mots à retourner, puis 
- * réassigne motActuel à une string vide "".
- */
-function obtenirMots(texte) { 
-    var mots = [],
-        motActuel = "",
-        caracActuel, caracPrecedent;
-    for (var i = 0; i < texte.length; i++) {
-        caracActuel = texte.charAt(i);
-        if (estEspaceOuRetour(caracActuel)) {  // si " " ou "\n" 
-            if (caracActuel == "\n")
-                mots.push(""); // signale un début et une fin de phrase
-            if (!estEspaceOuRetour(caracPrecedent)) 
-                mots.push(motActuel); // car fin du mot
-            motActuel = "";
-        } else {
-            motActuel += caracActuel;
-            if (i == texte.length - 1)
-                mots.push(motActuel); // car fin du texte
-        }
-        caracPrecedent = caracActuel;
-    }
-    return mots;
-}
-
-
-/* cette fonction reçoit un tableau de mots [strings]
- * et retourne tous les tableaux de n mots consécutifs [[strings]]
- */
-function grouper(mots, n) {
-    var vides = Array(n).fill(""),
-        tableauComplet = vides.concat(mots, vides),
-        resultat = [];
-
-    for (var i = 0; i <= mots.length; i++)
-        resultat.push(tableauComplet.slice(i, i + n + 1))
-    return resultat;
-}
-
-
-/* cette fonction reçoit un tableau de mots [strings]
- * et retourne un tableau de la forme [[string, string]]
- * 
- * Le tableau retourné représente les n mots consécutifs,
- * suivis du mot qui les suit.
- *
- * Les "mégaGroupes" obtenus ne sont pas nécessairement 
- * uniques, au contraire, ils sont exhaustifs. Ça permettra
- * de compter les occurences de leur mot final plus tard.
- */
-function megaGrouper(mots, n) {
+    omremegaGrouper(mots, n) {
     var megaGroupes = grouper(mots, n),
         resultat = megaGroupes.map(function (x) {
             var i = debutPropre(x);
@@ -174,30 +67,6 @@ function debutPropre(tableau){ //se fait appeler par megaGroupes
 }
 
 
-// cette fonction donne l'index d'un sous-tableau dans un tableau 2D
-// elle ne devrait jamais retourner -1 dans les cadre de cet exercice.
-Array.prototype.indexOfArrays = function (sousTableau) {
-    for (var i = 0; i < this.length; i++) {
-        if (sontIdentiques(sousTableau, this[i]))
-            return i;
-    }     
-    return -1;
-}
-
-
-// cette fonction retourne une Bool qui indique si les 2 tableaux
-// passés en arguments ont les mêmes valeurs.
-function sontIdentiques(tableau1, tableau2) {
-    if (tableau1.length != tableau2.length)
-        return false; // permet de gérer les tableaux vides.
-    for (var i = 0; i < tableau1.length; i++) {
-        if (tableau1[i] !== tableau2[i]) // doivent être de même type
-            return false;
-    }
-    return true;
-}
-
-
 // reçoit un caractère: String
 // => retourne si c'est un espace: Bool
 function estEspaceOuRetour(caract) {
@@ -209,16 +78,17 @@ function estEspaceOuRetour(caract) {
 var genererProchainMot = function(modele, motActuel) {
     var index = modele.dictionnaire.indexOf(motActuel),
         prochainsPossibles = modele.prochainsMots[index],
-        nombreHasard = Math.random(), 
+        uniforme01 = Math.random(), 
         cumul = 0;
-													//nenenenenenenene
-													//So j'aimais uniforme01 je me sentais prêt de ma discipline
-    for (option of prochainsPossibles) {			//et option a l'air d'être un mot spécial de mon côté
-        cumul += option.prob;
-        if (cumul > nombreHasard)
-            return option.mot;
+
+    for (cas of prochainsPossibles) {
+        cumul += cas.prob;
+        if (cumul > uniforme01)
+            return cas.mot;
     }
 };
+
+
 // exemple d'appel de genererProchainMot:
 // genererProchainMot(modeleTaco, "taco")
 var modeleTaco = creerModele("Je suis le plus taco des taco, j'aime tous le taco du monde et je taco taco avec toi taco");
@@ -292,16 +162,6 @@ var tests = function() {
     console.assert([{mot: "hey", prob: 2}, {mot: "taco", prob: 3}]
         .indexOfMot("taco") == 1);
 
-    // tests pour la méthode Array.prototype.indexOfArrays
-    console.assert([["u", ""], ["a", 0], ["hum"]].indexOfArrays(["hum"]) == 2,
-    new Error().stack);
-    console.assert([["u", ""], ["a", 0], ["hum"]].indexOfArrays(["u", ""]) == 0,
-    new Error().stack);
-    console.assert([["u", ""], ["a", 0], ["hum"]].indexOfArrays(["a", 0]) == 1,
-    new Error().stack);
-    console.assert([[], [0], ["zéro"]].indexOfArrays([]) == 0);
-    console.assert([[0], [], []].indexOfArrays([]) == 1);
-
     // tests pour trouverProchains(dico, megaGroupes)
     console.assert(JSON.stringify(trouverProchains(["", "hey", "yaa"], 
         [["", "lalala"], ["hey", "yaa"], ["hey", "naa"], ["yaa", ""]])) == 
@@ -332,10 +192,6 @@ var tests = function() {
 
     // tests pour debutPropre(tableau)
     console.assert(debutPropre(["", "", "", "helloooooow"]) == 3);
-
-    // tests pour sontIdentiques(tableau1, tableau2)
-    console.assert(sontIdentiques([], []));
-    console.assert(sontIdentiques(["Barack Obama"], ["Barack Obama"]));
 
     // à noter que les fonctions qui génèrent des mots/phrases/paragraphes
     // ne sont pas à tester, car elles contiennent des données aléatoires.
