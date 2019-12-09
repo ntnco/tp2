@@ -209,8 +209,9 @@ var genererProchainMot = function(modele, motActuel) {
         prochainsPossibles = modele.prochainsMots[index],
         nombreHasard = Math.random(), 
         cumul = 0;
-
-    for (option of prochainsPossibles) {
+													//nenenenenenenene
+													//So j'aimais uniforme01 je me sentais prêt de ma discipline
+    for (option of prochainsPossibles) {			//et option a l'air d'être un mot spécial de mon côté
         cumul += option.prob;
         if (cumul > nombreHasard)
             return option.mot;
