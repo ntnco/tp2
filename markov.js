@@ -225,9 +225,9 @@ var genererProchainMot = function(modele, motActuel) {
 };
 // exemple d'appel de genererProchainMot:
 // genererProchainMot(modeleTaco, "taco")
-var modeleTaco = creerModele("Je suis le plus taco des taco, j'aime tous le taco du monde et je taco taco avec toi taco");
+var modeleTaco = creerModele("Je suis le plus taco des taco, j'aime tous le taco du monde et je taco taco avec toi taco!");
 var modeleTest = creerModele('A B C.\nA B A.\nC B A.');
-genererParagraphes(modeleTest,3,3,10);
+
 
 
 var genererPhrase = function(modele, maxNbMots) {
@@ -280,6 +280,8 @@ var writeFile = function (path, texte) {
     fs.writeFileSync(path, texte);
 };
 
+console.log(genererParagraphes(modeleTest,3,3,10));
+console.log(genererParagraphes(modeleTaco,3,3,10));
 
 var tests = function() {
     /* Les tests seront lancés automatiquement si vous appelez ce
