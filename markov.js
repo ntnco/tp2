@@ -5,9 +5,9 @@
 
 // Roadmap
 // 1. commencer la fonction genererProchainMot()
-// 2. TODO: commencer la fonction genererPhrase()
-// 3. TODO: commencer la fonction genererParagraphes()
-// 
+// 2. commencer la fonction genererPhrase()
+// 3. commencer la fonction genererParagraphes()
+// 4. TODO: s'assurer que 1 à 3 fonctionnent bien avec les données wiki
 // 4. TODO: une fois que ces fonctions sont codées, on verra si
 //          le code qu'on a déjà fonctionne même avec ordre-r
 
@@ -110,6 +110,8 @@ function obtenirMots(texte) {
     for (var i = 0; i < texte.length; i++) {
         caracActuel = texte.charAt(i);
         if (estEspaceOuRetour(caracActuel)) {  // si " " ou "\n" 
+            if (caracActuel == "\n")
+                mots.push(""); // signale un début et une fin de phrase
             if (!estEspaceOuRetour(caracPrecedent)) 
                 mots.push(motActuel); // car fin du mot
             motActuel = "";
@@ -125,7 +127,7 @@ function obtenirMots(texte) {
 
 
 /* cette fonction reçoit un tableau de mots [strings]
- * et retourne tous les tableaux de n mots consécutifs
+ * et retourne tous les tableaux de n mots consécutifs [[strings]]
  */
 function grouper(mots, n) {
     var vides = Array(n).fill(""),
@@ -147,7 +149,7 @@ function grouper(mots, n) {
  * Les "mégaGroupes" obtenus ne sont pas nécessairement 
  * uniques, au contraire, ils sont exhaustifs. Ça permettra
  * de compter les occurences de leur mot final plus tard.
- * */
+ */
 function megaGrouper(mots, n) {
     var megaGroupes = grouper(mots, n),
         resultat = megaGroupes.map(function (x) {
@@ -219,11 +221,9 @@ var genererProchainMot = function(modele, motActuel) {
 };
 // exemple d'appel de genererProchainMot:
 // genererProchainMot(modeleTaco, "taco")
-
 var modeleTaco = creerModele("Je suis le plus taco des taco, j'aime tous le taco du monde et je taco taco avec toi taco");
 
 
-// TODO : compléter cette fonction
 var genererPhrase = function(modele, maxNbMots) {
     var prochainMot,
         phrase = [];
@@ -233,6 +233,8 @@ var genererPhrase = function(modele, maxNbMots) {
         prochainMot = genererProchainMot(modele, motActuel);
         if (prochainMot == "")
             break;
+        if (i == maxNbMots - 1)
+            prochainMot += ".";
         phrase.push(prochainMot);
         motActuel = prochainMot;
     }
@@ -240,9 +242,23 @@ var genererPhrase = function(modele, maxNbMots) {
 };
 
 
-// TODO : compléter cette fonction
+/* Cette fonction reçoit un modèle (objet) et 3 nombres.
+ * Elle retourne une String
 var genererParagraphes = function(modele, nbParagraphes, maxNbPhrases, maxNbMots) {
+    var paragraphes = [],
+        paragraphe = [],
+        phrase = "";
 
+    for (var i = 0; i < nbParagraphes; i++) {
+        for (var j = 0; j < maxNbPhrases; j++) {
+            phrase = genererPhrase(modele, maxNbMots);
+            paragraphe.push(phrase);
+        }
+        paragraphes.push(paragraphe.join(" "));
+        paragraphe = [];
+    }
+
+    return paragraphes.join("\n");
 };
 
 
@@ -260,9 +276,9 @@ var writeFile = function (path, texte) {
 
 var tests = function() {
     /* Les tests seront lancés automatiquement si vous appelez ce
-    fichier avec :
-       node markov.js
-       */
+     * fichier avec : 
+     * node markov.js
+     */
     
     // tests pour creerModele()
     console.assert(JSON.stringify(creerModele("no more tacos")) ==
@@ -321,14 +337,8 @@ var tests = function() {
     console.assert(sontIdentiques([], []));
     console.assert(sontIdentiques(["Barack Obama"], ["Barack Obama"]));
 
-    // tests pour genererProchainMot
-    console.assert(true);
-
-    // tests pour genererPhrase
-    console.assert(true);
-
-    // tests pour genererParagraphes
-    console.assert(true);
+    // à noter que les fonctions qui génèrent des mots/phrases/paragraphes
+    // ne sont pas à tester, car elles contiennent des données aléatoires.
 
     // tests pour estEspaceOuRetour()
     console.assert(estEspaceOuRetour(" ") == true);
