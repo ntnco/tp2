@@ -213,10 +213,10 @@ var genererProchainMot = function(modele, motActuel) {
         cumul = 0;
 													//nenenenenenenene
 													//So j'aimais uniforme01 je me sentais prêt de ma discipline
-    for (option of prochainsPossibles) {			//et option a l'air d'être un mot spécial de mon côté
-        cumul += option.prob;
+    for (cas of prochainsPossibles) {			//et option a l'air d'être un mot spécial de mon côté
+        cumul += cas.prob;
         if (cumul > nombreHasard)
-            return option.mot;
+            return cas.mot;
     }
 };
 // exemple d'appel de genererProchainMot:
