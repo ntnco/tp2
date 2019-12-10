@@ -295,7 +295,6 @@ var sendPage = function (reponse, page) {
 Les étiquettes sont dans un shitty load d'accolades pis comme les acoco sont
 déjaja dans le textito envoyé. On retourne le texte corrigé. On doit
 checker les carac spéciaux dans texte et valeur (AKA < et >)*/
-// sous-fonction qui prends un texte et remplace les < et > par les bons codes
 
 var substituerEtiquette = function (texte, etiquette, valeur) {
     var texteCorrige = correctionTexte(texte),
@@ -303,8 +302,14 @@ var substituerEtiquette = function (texte, etiquette, valeur) {
 };
 // sous-fonction qui prends un texte et remplace les < et > par les bons codes
 var correctionTexte = function (texte){
+	var texteCorrige =;
+	
+	if (carac=='<') carac='&lt;';
+	if (carac=='>') carac='&gt;';
 	//On veut parcourir ch. elem et remplacer les < et >
+	return texteCorrige
 };
+
 
 // TODO : compléter cette fonction
 var getIndex = function () {
