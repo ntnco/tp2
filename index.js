@@ -291,6 +291,10 @@ var sendPage = function (reponse, page) {
 // -------------------------------------
 
 // TODO : compléter cette fonction
+/*She supposed to remplacer toutes le etiquettes par la valeur spécifiée
+Les étiquettes sont dans un shitty load d'accolades pis comme les acoco sont
+déjaja dans le textito envoyé. On retourne le texte corrigé. On doit
+checker les carac spéciaux dans valeur*/
 var substituerEtiquette = function (texte, etiquette, valeur) {
     
 };
