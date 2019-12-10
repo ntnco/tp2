@@ -294,9 +294,16 @@ var sendPage = function (reponse, page) {
 /*She supposed to remplacer toutes le etiquettes par la valeur spécifiée
 Les étiquettes sont dans un shitty load d'accolades pis comme les acoco sont
 déjaja dans le textito envoyé. On retourne le texte corrigé. On doit
-checker les carac spéciaux dans valeur*/
+checker les carac spéciaux dans texte et valeur (AKA < et >)*/
+// sous-fonction qui prends un texte et remplace les < et > par les bons codes
+
 var substituerEtiquette = function (texte, etiquette, valeur) {
-    
+    var texteCorrige = correctionTexte(texte),
+		valeurCorrige = correctionTexte(valeur);
+};
+// sous-fonction qui prends un texte et remplace les < et > par les bons codes
+var correctionTexte = function (texte){
+	//On veut parcourir ch. elem et remplacer les < et >
 };
 
 // TODO : compléter cette fonction
