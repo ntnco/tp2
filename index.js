@@ -304,11 +304,14 @@ var substituerEtiquette = function (texte, etiquette, valeur) {
 	var texteCorrige=texte.replace(etiquette,valeurCorrige);
 	return texteCorrige;
 };
-// sous-fonction qui prends un texte et remplace les < et > par les bons codes
 
 
 
-// TODO : compléter cette fonction
+
+// On veut se tirer une balle
+/*
+On prends template et on veut substituer des etiquettes
+*/
 var getIndex = function () {
     return 'TODO : completer getIndex()';
 };
