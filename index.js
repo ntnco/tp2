@@ -297,12 +297,25 @@ déjaja dans le textito envoyé. On retourne le texte corrigé. On doit
 checker les carac spéciaux dans texte et valeur (AKA < et >)*/
 
 var substituerEtiquette = function (texte, etiquette, valeur) {
-	var valeurCorrige= valeur;
-	if(etiquette[2]!="{"){
-	valeurCorrige = entities.encode(valeur);	
-	}
-	var texteCorrige=texte.replace(etiquette,valeurCorrige);
-	return texteCorrige;
+    var valeurCorrigee; 
+
+    if (etiquette[2] != "{")
+        valeurCorrigee = Entities.encode(valeur); 
+    else 
+        valeurCorrigee = valeur;
+
+    var resultat = texte.split(etiquette).join(valeurCorrigee);
+
+    return resultat;
+
+    /*var valeurCorrigee;
+
+    if (etiquette[2] != "{")
+        valeurCorrigee = 
+    else 
+        valeurCorrigee = valeur;	
+
+    return texte.replace(etiquette,valeurCorrigee);*/
 };
 
 
@@ -374,3 +387,18 @@ http.createServer(function (requete, reponse) {
 
     sendPage(reponse, doc);
 }).listen(port);
+
+
+
+
+
+function tests(){
+    console.assert(substituerEtiquette("hellooooo {{{tacos}}} ", 
+        "{{{tacos}}}", "<taco>🌮</taco>") == 'hellooooo <taco>🌮</taco> ');
+    console.assert(substituerEtiquette("hellooooo {{{tacos}}} ", 
+        "{{tacos}}", "<taco>🌮</taco>") == 'hellooooo {&lt;taco&gt;🌮&lt;/taco&gt;} ');
+    console.assert(substituerEtiquette("hellooooo {{{tacos}}} would you like {{{tacos}}} ?", "{{{tacos}}}", "<taco>🌮</taco>") == 'hellooooo <taco>🌮</taco> would you like <taco>🌮</taco> ?');
+}
+
+
+substituerEtiquette("hellooooo {{{tacos}}} would you like {{{tacos}}} ?");
