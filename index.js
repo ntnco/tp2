@@ -331,6 +331,8 @@ var getIndex = function () {
         tagDebut = "<li><a href=",
         tagFin = "</a></li>",
         liens = Array(20).fill("\"lien\">");
+
+    var image = "<img src=\"" + getImage() + "\">"
     console.table(titres);
 
     var liensTitres = titres.map(function(elem, i) {
@@ -341,7 +343,9 @@ var getIndex = function () {
         "{{{articles-recents}}}", liensTitres),
         liste = "<ul>\n" + resultat + "</ul>";
     
-    writeFile("test.html", resultat);
+    var avecImage = substituerEtiquette(resultat, image);
+    
+    writeFile("test.html", avecImage);
     return resultat; 
 };
 
