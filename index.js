@@ -303,20 +303,10 @@ var substituerEtiquette = function (texte, etiquette, valeur) {
 };
 // sous-fonction qui prends un texte et remplace les < et > par les bons codes
 var correctionTexte = function (texte){
-	var carac="";
 
-	for (var i = 0; i < texte.length; i++) {
-        carac = texte.charAt(i);
-		//Slice slice join join?
-		
-		if (carac=='<') carac='&lt;';
-		if (carac=='>') carac='&gt;'; 
-    }
-	
-	
-	
-	
-	//On veut parcourir ch. elem et remplacer les < et >
+	var texteCorrige=texte;
+	texteCorrige.replace('<','&lt;');
+	texteCorrige.replace('>','&gt;');
 	return texteCorrige;
 	
 	
