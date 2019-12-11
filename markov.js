@@ -73,7 +73,7 @@ function trouverProchains(dico, megaGroupes) {
     for (mot of dico) {  
         resultat.push([]);
         for (paire of megaGroupes) {
-            if (paire[0] == mot) {
+            if (paire[0] == mot && paire[1] != "") {
                 compte++; // servira à calculer la prob du mot
                 bonIndex = resultat[i].indexOfMot(paire[1]); //cherche paire[1]
                 if (bonIndex == -1)
@@ -215,14 +215,16 @@ var genererProchainMot = function(modele, motActuel) {
         prochainsPossibles = modele.prochainsMots[index],
         nombreHasard = Math.random(), 
         cumul = 0;
-													//nenenenenenenene
-													//So j'aimais uniforme01 je me sentais prêt de ma discipline
-    for (cas of prochainsPossibles) {			//et option a l'air d'être un mot spécial de mon côté
+    if (prochainsPossibles.length == 0)
+        return null;
+    for (cas of prochainsPossibles) {
         cumul += cas.prob;
         if (cumul > nombreHasard)
             return cas.mot;
     }
 };
+
+
 // exemple d'appel de genererProchainMot:
 // genererProchainMot(modeleTaco, "taco")
 var modeleTaco = creerModele("Je suis le plus taco des taco, j'aime tous le taco du monde et je taco taco avec toi taco!");
@@ -237,7 +239,7 @@ var genererPhrase = function(modele, maxNbMots) {
 
     for (var i = 0; i < maxNbMots; i++) {
         prochainMot = genererProchainMot(modele, motActuel);
-        if (prochainMot == "")
+        if (prochainMot === null)
             break;
         if (i == maxNbMots - 1)
             prochainMot += ".";
