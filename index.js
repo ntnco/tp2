@@ -354,10 +354,20 @@ function getPhrase() {
 
 var getArticle = function(titre) {
 
+<<<<<<< HEAD
+    var template = readFile("template/article.html");
+    var avecTitre = substituerEtiquette(template, "{{titre}}",
+    titre);
+    var modeleTaco= creerModele("Tous les tacos tacos du monde sont moins bien que mon taco");
+	var avecContenu = substituerEtiquette(template,{{{contenu}}},<p>genererParagraphes(modeleTaco,1,10,15)<\p>);
+        
+    return avecTitre;
+=======
     var template = readFile("template/article.html"),
         avecTitre = substituerEtiquette(template, "{{titre}}", titre),
         avecImage = substituerEtiquette(avecTitre, "{{img}}", 
             getImage(titre));
+<<<<<<< HEAD
 
     var templateIntro = getPhrase();
     console.log(templateIntro);
@@ -376,6 +386,11 @@ var getArticle = function(titre) {
     var resultat = substituerEtiquette(avecImage, 
         "{{{contenu}}}", contenu);
     return resultat;
+=======
+        
+    return avecImage;
+>>>>>>> be7a4314cd07bfb3723c751082f47cbed4c97745
+>>>>>>> c99c39842782d28f909ac3c6797887d80e8c8581
 };
 
 writeFile("testArticle.html", getArticle("omgsoTitle"));
