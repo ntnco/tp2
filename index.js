@@ -368,8 +368,8 @@ var getArticle = function(titre) {
     var introTitre = substituerEtiquette(introMoitie2,
         "{{titre}}", titre);
     
-    var modele = creerModele("corpus/eros");
-    var contenu = introTitre + "\n" + genererParagraphes(modele, 10,3,3);
+    var modele = creerModele(readFile("corpus/eros"));
+    var contenu = introTitre + "\n" + genererParagraphes(modele, 10,3,10);
 
     var article = substituerEtiquette(avecImage, 
         "{{{contenu}}}", contenu);
