@@ -307,31 +307,26 @@ var substituerEtiquette = function (texte, etiquette, valeur) {
     var resultat = texte.split(etiquette).join(valeurCorrigee);
 
     return resultat;
-
-    /*var valeurCorrigee;
-
-    if (etiquette[2] != "{")
-        valeurCorrigee = 
-    else 
-        valeurCorrigee = valeur;	
-
-    return texte.replace(etiquette,valeurCorrigee);*/
 };
 
 
 
-//<<<<<<< HEAD                    wat? ça veut dire quoi head ici :P
-// TODO : continuer cette fonction
-//=======                         et ça aussi c'est quoi
-
 /*
 On prends template et on veut substituer des etiquettes
 */
-//>>>>>>> 304a681946f3e8ecc5f3469915c7fde5c559be06        <-wat is dis
 var getIndex = function () {
     var template = readFile("template/index.html");
-    console.log(template);
-    return template; 
+
+    var titres = getRandomPageTitles(20),
+        tagDebut = "<a href=",
+        tagFin = "</a>";
+    console.table(titres);
+
+
+    var resultat = substituerEtiquette(template, 
+        "{{{articles-recents}}}", titres);
+
+    return resultat; 
 };
 
 // TODO
