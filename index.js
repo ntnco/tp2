@@ -347,7 +347,10 @@ var getIndex = function () {
     return avecImage; 
 };
 
-
+function getPhrase() {
+    var index = Math.random() * premieresPhrases.length;
+    return premieresPhrases[index >> 0]; // équivalent de floor
+}
 
 var getArticle = function(titre) {
 
@@ -355,11 +358,27 @@ var getArticle = function(titre) {
         avecTitre = substituerEtiquette(template, "{{titre}}", titre),
         avecImage = substituerEtiquette(avecTitre, "{{img}}", 
             getImage(titre));
-        
-    return avecImage;
+
+    var templateIntro = getPhrase();
+    console.log(templateIntro);
+
+    console.log("1");
+    var introMoitie1 = substituerEtiquette(templateIntro,
+        "{{titre-1}}", titre.substring(0, titre.length >> 1));
+    var introMoitie2 = substituerEtiquette(introMoitie1,
+        "{{titre-2}}", titre.substring(titre.length >> 1));
+    var introTitre = substituerEtiquette(introMoitie2,
+        "{{titre}}", titre);
+
+    console.log("2");
+    var contenu = introTitre;
+
+    var resultat = substituerEtiquette(avecImage, 
+        "{{{contenu}}}", contenu);
+    return resultat;
 };
 
-writeFile("testArticle.html", getArticle("omgsorandomTitle"))
+writeFile("testArticle.html", getArticle("omgsoTitle"));
 
 
 
