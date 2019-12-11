@@ -309,19 +309,7 @@ var substituerEtiquette = function (texte, etiquette, valeur) {
     return resultat;
 };
 
-
-
-/*
-On prends template et on veut substituer des etiquettes
-*/
-//           wat? ça veut dire quoi head ici :P
-// TODO e continuer cette fonction
-//=======                         et ça aussi c'est quoi
-
-
-
-// TODO: update les liens de getIndex
-/*
+/* TODO: update les liens de getIndex
 On prends template et on veut substituer des etiquettes
 */
 var getIndex = function () {
@@ -368,13 +356,17 @@ var getArticle = function(titre) {
     var introTitre = substituerEtiquette(introMoitie2,
         "{{titre}}", titre);
     
-    var modele = creerModele(readFile("corpus/eros"));
-    var contenu = introTitre + "\n" + genererParagraphes(modele, 10,3,10);
+    var modele = creerModele(readFile("corpus/eros")),
+        paragraphes = genererParagraphes(modele, 5,3,20).map(function(elem){
+            return "<p>" + elem + "</p>"; 
+        });
+    var contenu = introTitre + "\n" + paragraphes.join("\n") + "\n";
 
     var article = substituerEtiquette(avecImage, 
         "{{{contenu}}}", contenu);
     return article;
 };
+
 
 writeFile("testArticle.html", getArticle("omgsoTitle"));
 

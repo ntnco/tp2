@@ -27,10 +27,10 @@ var creerModele = function(texte, r = 1) {
     modele.dictionnaire = toutSaufLesDerniers(groupes);
     modele.prochainsMots = trouverProchains(modele.dictionnaire, 
         megaGroupes);
-	
-	/*console.log(mots);
-	console.table(groupes);
-	console.table(megaGroupes);
+
+    /*console.log(mots);
+        console.table(groupes);
+        console.table(megaGroupes);
     console.log("dictionnaire:"); console.table(modele.dictionnaire);
     console.log("prochainsMots:"); console.table(modele.prochainsMots);*/
 
@@ -267,7 +267,7 @@ var genererParagraphes = function(modele, nbParagraphes, maxNbPhrases, maxNbMots
         paragraphe = [];
     }
 
-    return paragraphes.join("\n");
+    return paragraphes;
 };
 
 
@@ -295,13 +295,16 @@ var tests = function() {
     console.assert(JSON.stringify(creerModele("no more tacos")) ==
         '{"dictionnaire":["","no","more","tacos"],'+
         '"prochainsMots":[[{"mot":"no","prob":1}],[{"mot":"more","prob":1}],'+
-        '[{"mot":"tacos","prob":1}],[{"mot":"","prob":1}]]}');
+        '[{"mot":"tacos","prob":1}],[{"mot":"","prob":1}]]}',
+    new Error().stack);
 
     // tests pour la méthode Array.prototype.indexOfMot()
     console.assert([{mot: "hey", prob: 2}, {mot: "taco", prob: 3}]
-        .indexOfMot("hey") == 0);
+        .indexOfMot("hey") == 0,
+    new Error().stack);
     console.assert([{mot: "hey", prob: 2}, {mot: "taco", prob: 3}]
-        .indexOfMot("taco") == 1);
+        .indexOfMot("taco") == 1,
+    new Error().stack);
 
     // tests pour la méthode Array.prototype.indexOfArrays
     console.assert([["u", ""], ["a", 0], ["hum"]].indexOfArrays(["hum"]) == 2,
@@ -317,11 +320,13 @@ var tests = function() {
     console.assert(JSON.stringify(trouverProchains(["", "hey", "yaa"], 
         [["", "lalala"], ["hey", "yaa"], ["hey", "naa"], ["yaa", ""]])) == 
         '[[{"mot":"lalala","prob":1}],[{"mot":"yaa","prob":0.5},' +
-        '{"mot":"naa","prob":0.5}],[{"mot":"","prob":1}]]');
+        '{"mot":"naa","prob":0.5}],[{"mot":"","prob":1}]]',
+    new Error().stack);
 
     // tests pour toutSaufLesDerniers()
     console.assert("" + toutSaufLesDerniers([["", "b"], ["sponge", "bob"]]) == 
-        ",sponge");
+        ",sponge",
+    new Error().stack);
 
     // tests pour obtenirMots()
     console.assert("" + obtenirMots("ah que la neige a neigé") == 
