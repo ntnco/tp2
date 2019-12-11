@@ -318,6 +318,9 @@ On prends template et on veut substituer des etiquettes
 // TODO : continuer cette fonction
 //=======                         et ça aussi c'est quoi
 
+
+
+// TODO: update les liens de getIndex
 /*
 On prends template et on veut substituer des etiquettes
 */
@@ -325,14 +328,20 @@ var getIndex = function () {
     var template = readFile("template/index.html");
 
     var titres = getRandomPageTitles(20),
-        tagDebut = "<a href=",
-        tagFin = "</a>";
+        tagDebut = "<li><a href=",
+        tagFin = "</a></li>",
+        liens = Array(20).fill("\"lien\">");
     console.table(titres);
 
+    var liensTitres = titres.map(function(elem, i) {
+        return tagDebut + liens[i] + elem + tagFin;
+    }).join("\n") + "\n";
 
     var resultat = substituerEtiquette(template, 
-        "{{{articles-recents}}}", titres);
-
+        "{{{articles-recents}}}", liensTitres),
+        liste = "<ul>\n" + resultat + "</ul>";
+    
+    writeFile("test.html", resultat);
     return resultat; 
 };
 
