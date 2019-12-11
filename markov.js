@@ -2,7 +2,7 @@
 // Emma Parent-Senez, 20071506
 // Antoine Colson-Ratelle, 990432
 
-
+creerModele(readFile("corpus/eros")); //////////à effacer pour remise                                                           //////////////////////////////////////////////////////
 // Roadmap
 // 1. commencer la fonction genererProchainMot()
 // 2. commencer la fonction genererPhrase()
@@ -29,14 +29,15 @@ var creerModele = function(texte, r = 1) {
     modele.prochainsMots = trouverProchains(modele.dictionnaire, 
         megaGroupes);
 	
-	console.log(mots);
+	/*console.log(mots);
 	console.table(groupes);
 	console.table(megaGroupes);
     console.log("dictionnaire:"); console.table(modele.dictionnaire);
-    console.log("prochainsMots:"); console.table(modele.prochainsMots);
+    console.log("prochainsMots:"); console.table(modele.prochainsMots);*/
 
     return modele;
 };
+
 
 
 /* Cette méthode cherche un mot dans un tableau d'enregistrements
