@@ -351,13 +351,15 @@ var getIndex = function () {
 
 var getArticle = function(titre) {
 
-    var template = readFile("template/article.html");
-    var avecTitre = substituerEtiquette(template, "{{titre}}",
-    titre);
+    var template = readFile("template/article.html"),
+        avecTitre = substituerEtiquette(template, "{{titre}}", titre),
+        avecImage = substituerEtiquette(avecTitre, "{{img}}", 
+            getImage(titre));
         
-        
-    return avecTitre;
+    return avecImage;
 };
+
+writeFile("testArticle.html", getArticle("omgsorandomTitle"))
 
 
 
