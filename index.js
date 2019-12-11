@@ -354,7 +354,8 @@ var getArticle = function(titre) {
     var template = readFile("template/article.html");
     var avecTitre = substituerEtiquette(template, "{{titre}}",
     titre);
-        
+    var modeleTaco= creerModele("Tous les tacos tacos du monde sont moins bien que mon taco");
+	var avecContenu = substituerEtiquette(template,{{{contenu}}},<p>genererParagraphes(modeleTaco,1,10,15)<\p>);
         
     return avecTitre;
 };
