@@ -315,7 +315,7 @@ var substituerEtiquette = function (texte, etiquette, valeur) {
 On prends template et on veut substituer des etiquettes
 */
 //           wat? ça veut dire quoi head ici :P
-// TODO : continuer cette fonction
+// TODO e continuer cette fonction
 //=======                         et ça aussi c'est quoi
 
 
@@ -332,9 +332,6 @@ var getIndex = function () {
         tagFin = "</a></li>",
         liens = Array(20).fill("\"lien\">");
 
-    var image = "<img src=\"" + getImage() + "\">"
-    console.table(titres);
-
     var liensTitres = titres.map(function(elem, i) {
         return tagDebut + liens[i] + elem + tagFin;
     }).join("\n") + "\n";
@@ -343,17 +340,24 @@ var getIndex = function () {
         "{{{articles-recents}}}", liensTitres),
         liste = "<ul>\n" + resultat + "</ul>";
     
-    var avecImage = substituerEtiquette(resultat, image);
+    var avecImage = substituerEtiquette(resultat, 
+        "{{img}}", getImage());
     
     writeFile("test.html", avecImage);
-    return resultat; 
+    return avecImage; 
 };
 
-// TODO
+
+
 var getArticle = function(titre) {
-    return 'TODO : completer getArticle()';
-};
 
+    var template = readFile("template/article.html");
+    var avecTitre = substituerEtiquette(template, "{{titre}}",
+    titre);
+        
+        
+    return avecTitre;
+};
 
 
 
