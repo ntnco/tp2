@@ -2,7 +2,6 @@
 // Emma Parent-Senez, 20071506
 // Antoine Colson-Ratelle, 990432
 
-creerModele(readFile("corpus/eros")); //////////à effacer pour remise                                                           //////////////////////////////////////////////////////
 // Roadmap
 // 1. commencer la fonction genererProchainMot()
 // 2. commencer la fonction genererPhrase()
@@ -372,3 +371,4 @@ if (require.main === module) {
 
 
 
+creerModele(readFile("corpus/eros")); //////////à effacer pour remise                                                           //////////////////////////////////////////////////////

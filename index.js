@@ -360,22 +360,20 @@ var getArticle = function(titre) {
             getImage(titre));
 
     var templateIntro = getPhrase();
-    console.log(templateIntro);
 
-    console.log("1");
     var introMoitie1 = substituerEtiquette(templateIntro,
         "{{titre-1}}", titre.substring(0, titre.length >> 1));
     var introMoitie2 = substituerEtiquette(introMoitie1,
         "{{titre-2}}", titre.substring(titre.length >> 1));
     var introTitre = substituerEtiquette(introMoitie2,
         "{{titre}}", titre);
+    
+    var modele = creerModele("corpus/eros");
+    var contenu = introTitre + "\n" + genererParagraphes(modele, 10,3,3);
 
-    console.log("2");
-    var contenu = introTitre;
-
-    var resultat = substituerEtiquette(avecImage, 
+    var article = substituerEtiquette(avecImage, 
         "{{{contenu}}}", contenu);
-    return resultat;
+    return article;
 };
 
 writeFile("testArticle.html", getArticle("omgsoTitle"));
