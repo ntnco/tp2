@@ -311,9 +311,20 @@ var substituerEtiquette = function (texte, etiquette, valeur) {
 
 
 
+<<<<<<< HEAD
 /*
 On prends template et on veut substituer des etiquettes
 */
+=======
+//           wat? ça veut dire quoi head ici :P
+// TODO : continuer cette fonction
+//=======                         et ça aussi c'est quoi
+
+/*
+On prends template et on veut substituer des etiquettes
+*/
+       <-wat is dis
+>>>>>>> 309ece1910f836f9879709fdbbf6144b8a64a017
 var getIndex = function () {
     var template = readFile("template/index.html");
 
