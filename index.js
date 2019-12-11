@@ -302,7 +302,7 @@ var substituerEtiquette = function (texte, etiquette, valeur) {
 	valeurCorrige = entities.encode(valeur);	
 	}
 	var texteCorrige=texte.replace(etiquette,valeurCorrige);
-		return texteCorrige;
+	return texteCorrige;
 };
 // sous-fonction qui prends un texte et remplace les < et > par les bons codes
 
