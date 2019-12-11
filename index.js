@@ -297,20 +297,15 @@ déjaja dans le textito envoyé. On retourne le texte corrigé. On doit
 checker les carac spéciaux dans texte et valeur (AKA < et >)*/
 
 var substituerEtiquette = function (texte, etiquette, valeur) {
-    var texteCorrige = correctionTexte(texte),
-		valeurCorrige = correctionTexte(valeur);
-		return;
+	var valeurCorrige= valeur;
+	if(etiquette[2]!="{"){
+	valeurCorrige = entities.encode(valeur);	
+	}
+	var texteCorrige=texte.replace(etiquette,valeurCorrige);
+		return texteCorrige;
 };
 // sous-fonction qui prends un texte et remplace les < et > par les bons codes
-var correctionTexte = function (texte){
 
-	var texteCorrige=texte;
-	texteCorrige.replace('<','&lt;');
-	texteCorrige.replace('>','&gt;');
-	return texteCorrige;
-	
-	
-};
 
 
 // TODO : compléter cette fonction
