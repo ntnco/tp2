@@ -321,9 +321,11 @@ var substituerEtiquette = function (texte, etiquette, valeur) {
 
 
 
-// TODO : compléter cette fonction
+// TODO : continuer cette fonction
 var getIndex = function () {
-    return 'TODO : completer getIndex()';
+    var template = readFile("template/index.html");
+    console.log(template);
+    return template; 
 };
 
 // TODO
@@ -398,4 +400,3 @@ function tests(){
 }
 
 
-substituerEtiquette("hellooooo {{{tacos}}} would you like {{{tacos}}} ?");
