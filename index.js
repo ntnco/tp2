@@ -299,15 +299,27 @@ checker les carac spéciaux dans texte et valeur (AKA < et >)*/
 var substituerEtiquette = function (texte, etiquette, valeur) {
     var texteCorrige = correctionTexte(texte),
 		valeurCorrige = correctionTexte(valeur);
+		return;
 };
 // sous-fonction qui prends un texte et remplace les < et > par les bons codes
 var correctionTexte = function (texte){
-	var texteCorrige =;
+	var carac="";
+
+	for (var i = 0; i < texte.length; i++) {
+        carac = texte.charAt(i);
+		//Slice slice join join?
+		
+		if (carac=='<') carac='&lt;';
+		if (carac=='>') carac='&gt;'; 
+    }
 	
-	if (carac=='<') carac='&lt;';
-	if (carac=='>') carac='&gt;';
+	
+	
+	
 	//On veut parcourir ch. elem et remplacer les < et >
-	return texteCorrige
+	return texteCorrige;
+	
+	
 };
 
 
