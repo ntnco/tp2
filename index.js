@@ -351,6 +351,7 @@ var getIndex = function () {
 
 var getArticle = function(titre) {
 
+<<<<<<< HEAD
     var template = readFile("template/article.html");
     var avecTitre = substituerEtiquette(template, "{{titre}}",
     titre);
@@ -358,7 +359,17 @@ var getArticle = function(titre) {
 	var avecContenu = substituerEtiquette(template,{{{contenu}}},<p>genererParagraphes(modeleTaco,1,10,15)<\p>);
         
     return avecTitre;
+=======
+    var template = readFile("template/article.html"),
+        avecTitre = substituerEtiquette(template, "{{titre}}", titre),
+        avecImage = substituerEtiquette(avecTitre, "{{img}}", 
+            getImage(titre));
+        
+    return avecImage;
+>>>>>>> be7a4314cd07bfb3723c751082f47cbed4c97745
 };
+
+writeFile("testArticle.html", getArticle("omgsorandomTitle"))
 
 
 
