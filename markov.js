@@ -11,6 +11,18 @@
 //          le code qu'on a déjà fonctionne même avec ordre-r
 
 
+// Utilitaires pour manipuler des fichiers
+var fs = require("fs");
+
+var readFile = function (path) {
+    return fs.readFileSync(path).toString();
+};
+
+var writeFile = function (path, texte) {
+    fs.writeFileSync(path, texte);
+};
+
+
 /* C'est la fonction principale. Elle reçoit du texte : string 
  * et retourne un objet: {[strings], [enregistrements]}
  * 
@@ -28,16 +40,16 @@ var creerModele = function(texte, r = 1) {
     modele.prochainsMots = trouverProchains(modele.dictionnaire, 
         megaGroupes);
 
-    /*console.log(mots);
+    console.log(mots);
         console.table(groupes);
         console.table(megaGroupes);
     console.log("dictionnaire:"); console.table(modele.dictionnaire);
-    console.log("prochainsMots:"); console.table(modele.prochainsMots);*/
+    console.log("prochainsMots:"); console.table(modele.prochainsMots);
 
     return modele;
 };
 
-
+//creerModele(readFile("corpus/trivial"), 2)
 
 /* Cette méthode cherche un mot dans un tableau d'enregistrements
  * Elle retourne l'index de l'enregistrement contenant le mot ciblé. 
@@ -225,10 +237,10 @@ var genererProchainMot = function(modele, motActuel) {
 };
 
 
-// exemple d'appel de genererProchainMot:
+/* exemple d'appel de genererProchainMot:
 // genererProchainMot(modeleTaco, "taco")
 var modeleTaco = creerModele("Je suis le plus taco des taco, j'aime tous le taco du monde et je taco taco avec toi taco!");
-var modeleTest = creerModele('A B C.\nA B A.\nC B A.');
+var modeleTest = creerModele('A B C.\nA B A.\nC B A.');*/
 
 
 
@@ -270,20 +282,6 @@ var genererParagraphes = function(modele, nbParagraphes, maxNbPhrases, maxNbMots
     return paragraphes;
 };
 
-
-// Utilitaires pour manipuler des fichiers
-var fs = require("fs");
-
-var readFile = function (path) {
-    return fs.readFileSync(path).toString();
-};
-
-var writeFile = function (path, texte) {
-    fs.writeFileSync(path, texte);
-};
-
-console.log(genererParagraphes(modeleTest,3,3,10));
-console.log(genererParagraphes(modeleTaco,3,3,10));
 
 var tests = function() {
     /* Les tests seront lancés automatiquement si vous appelez ce
