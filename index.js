@@ -356,6 +356,9 @@ var getArticle = function(titre) {
         "{{titre}}", titre);
     
     var paragraphes = genererParagraphes(modele, 4,8,20).map(function(paragraphe){
+			var mots = obtenirMots(paragraphe);
+			mots = mots.map(function(x,i){});
+			mots.join(" ");
             return "<p>" + /*baliserPar(*/paragraphe/*)*/ + "</p>\n"; // baliserPar(paragraphe)
         });
     // je propose d'écrire une fonction qui va modifier les paragraphes en ajoutant
@@ -378,7 +381,7 @@ function baliserMot(mot) {
 		if(uniforme01<0.15) mot = balisage(mot, 'strong');
 		else if(uniforme01<0.3) mot = balisage(mot,'em');
 		else if(uniforme01<0.45) mot = balisage(mot,'a');
-
+	
 	}
 
     return mot ; // TODO: ajouter tags <em> si valide. Pour l'instant ça retourne mot anyways 
@@ -386,7 +389,7 @@ function baliserMot(mot) {
 
 var balisage= function(mot,type){
 	if(type=='a'){
-		return <type href= >mot<\type>;
+		return <type href= article/titre>mot<\type>;
 	}
 	return <type>mot</type>;
 };
