@@ -393,12 +393,13 @@ function estValide(mot) {
     if (mot.length < 7)
         return false;
 
+    var code;
     for (var i = 0; i < mot.length; i++) {
-        var code = mot.charCodeAt(i);
-        if (!(code < 91 && code > 64 && code > 96 && code < 123))
+        code = mot.charCodeAt(i);
+        if (!((code < 91 && code > 64) || (code > 96 && code < 123)))
             return false;
     }
-    return true; //  TODO: insérer les bons nombres
+    return true; //  TODO: trouver pk ça retourne tjrs false 
 }
 
 
