@@ -389,8 +389,8 @@ function baliserMot(mot) {
 var balisage = function(mot,type){
     if(type=='a')
 		//	Transformer première lettre de mot en maj pour chercher la page?
-        return "<" + type +" href= /" + mot + ">" 
-            + mot + "</" + type + ">";
+        return "<a href=/article/"+mot+">"+mot+"</a>";
+		
     else 
         return "<" + type + ">" + mot + "</" + type + ">";
 };
