@@ -356,10 +356,13 @@ var getArticle = function(titre) {
         "{{titre}}", titre);
     
     var paragraphes = genererParagraphes(modele, 4,8,20).map(function(paragraphe){
-			var mots = obtenirMots(paragraphe);
-			mots = mots.map(function(x,i){});
-			mots.join(" ");
-            return "<p>" + /*baliserPar(*/paragraphe/*)*/ + "</p>\n"; // baliserPar(paragraphe)
+
+			/*var mots = paragraphe; // effacer ce code!
+			mots = mots.map(function(x,i){}); // effacer ce code!
+			mots.join(" ");*/ // effacer ce code!
+
+            // au lieu du code ci-dessus, on va pouvoir décommenter le code dans la ligne ci-dessous!
+            return "<p>" + /*baliserPar(*/paragraphe/*)*/ + "</p>\n"; 
         });
     // je propose d'écrire une fonction qui va modifier les paragraphes en ajoutant
     // les links dans 15% des cas, du genre baliser(paragraphe)
@@ -370,28 +373,28 @@ var getArticle = function(titre) {
     var article = substituerEtiquette(avecImage, 
         "{{{contenu}}}", contenu);
 
-    console.log(article);
     return article;
 };
 
 function baliserMot(mot) {
     if (estValide(mot)){
-		console.log("mot est valide");
-		var uniforme01=Math.random();
-		if(uniforme01<0.15) mot = balisage(mot, 'strong');
-		else if(uniforme01<0.3) mot = balisage(mot,'em');
-		else if(uniforme01<0.45) mot = balisage(mot,'a');
-	
-	}
+        console.log("mot est valide");
+        var uniforme01=Math.random();
+        if(uniforme01<0.15) mot = balisage(mot, 'strong');
+        else if(uniforme01<0.3) mot = balisage(mot,'em');
+        else if(uniforme01<0.45) mot = balisage(mot,'a');
+
+    }
 
     return mot ; // TODO: ajouter tags <em> si valide. Pour l'instant ça retourne mot anyways 
 }
 
-var balisage= function(mot,type){
-	if(type=='a'){
-		return <type href= article/titre>mot<\type>;
-	}
-	return <type>mot</type>;
+var balisage = function(mot,type){
+    if(type=='a')
+        return "<" + type +"href= article/" + mot + ">" 
+            + mot + "</" + type + ">";
+    else 
+        return "<" + type + ">" + mot + "</" + type + ">";
 };
 
 

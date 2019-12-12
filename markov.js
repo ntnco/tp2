@@ -40,11 +40,11 @@ var creerModele = function(texte, r = 1) {
     modele.prochainsMots = trouverProchains(modele.dictionnaire, 
         megaGroupes);
 
-    console.log(mots);
+    /*console.log(mots);
         console.table(groupes);
         console.table(megaGroupes);
     console.log("dictionnaire:"); console.table(modele.dictionnaire);
-    console.log("prochainsMots:"); console.table(modele.prochainsMots);
+    console.log("prochainsMots:"); console.table(modele.prochainsMots);*/
 
     return modele;
 };
