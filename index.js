@@ -348,9 +348,7 @@ var getArticle = function(titre) {
         avecImage = substituerEtiquette(avecTitre, "{{img}}", 
             getImage(titre));
 
-    var templateIntro = getPhrase();
-
-    var introMoitie1 = substituerEtiquette(templateIntro,
+    var introMoitie1 = substituerEtiquette(getPhrase(),
         "{{titre-1}}", titre.substring(0, titre.length >> 1));
     var introMoitie2 = substituerEtiquette(introMoitie1,
         "{{titre-2}}", titre.substring(titre.length >> 1));
@@ -358,7 +356,7 @@ var getArticle = function(titre) {
         "{{titre}}", titre);
     
     var paragraphes = genererParagraphes(modele, 4,8,20).map(function(paragraphe){
-            return "<p>" + /*baliser(*/paragraphe/*)*/ + "</p>\n"; // baliser(paragraphe)
+            return "<p>" + /*baliserPar(*/paragraphe/*)*/ + "</p>\n"; // baliserPar(paragraphe)
         });
     // je propose d'écrire une fonction qui va modifier les paragraphes en ajoutant
     // les links dans 15% des cas, du genre baliser(paragraphe)
@@ -373,17 +371,34 @@ var getArticle = function(titre) {
 };
 
 
-function baliser(paragraphe) {
+function baliserMot(mot) {
+    if estValide(mot)
+        console.log("mot est valide");
+
+    return mot ; // TODO: ajouter tags <em> si valide. Pour l'instant ça retourne mot anyways 
+}
+
+
+function baliserPar(paragraphe) {
     var tabParag = paragraphe.split(" "); 
     
     var nouveauParag = tabParag
     return nouveauParag; // TODO: rendre ça legit et tester
 }
 
+
 // reçoit un mot : String
 // retourne s'il est 7+ lettres et alphabétique
 function estValide(mot) {
-    return true; //  TODO: rendre cette fonction legit
+    if (mot.length < 7)
+        return false;
+
+    for (var i = 0; i < mot.length; i++) {
+        var code = mot.charCodeAt(i);
+        if (!(code < 112 && code > 64 && code > 96 && code < 87))
+            return false;
+    }
+    return true; //  TODO: insérer les bons nombres
 }
 
 
