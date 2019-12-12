@@ -388,7 +388,7 @@ function baliserPar(paragraphe) {
 
 
 // reçoit un mot : String
-// retourne s'il est 7+ lettres et alphabétique
+// retourne s'il est 7+ lettres et alphabétique : Bool
 function estValide(mot) {
     if (mot.length < 7)
         return false;
