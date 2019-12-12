@@ -371,9 +371,8 @@ var getArticle = function(titre) {
     return article;
 };
 
-
 function baliserMot(mot) {
-    if estValide(mot)
+    if (estValide(mot))
         console.log("mot est valide");
 
     return mot ; // TODO: ajouter tags <em> si valide. Pour l'instant ça retourne mot anyways 
@@ -401,7 +400,6 @@ function estValide(mot) {
     }
     return true; //  TODO: insérer les bons nombres
 }
-
 
 
 /*
