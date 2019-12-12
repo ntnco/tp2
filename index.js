@@ -291,28 +291,30 @@ var modele = creerModele(readFile("corpus/eros"))
 //       MODIFIER EST CI-DESSOUS
 // -------------------------------------
 
-// TODO : compléter cette fonction
-/*She supposed to remplacer toutes le etiquettes par la valeur spécifiée
-Les étiquettes sont dans un shitty load d'accolades pis comme les acoco sont
-déjaja dans le textito envoyé. On retourne le texte corrigé. On doit
-checker les carac spéciaux dans texte et valeur (AKA < et >)*/
-
+/* Reçoit 3 inputs:
+ *     texte de type String
+ *     etiquette de type String
+ *     valeur de type String
+ * Retourne un texte où les étiquettes ont été remplacées par 
+ * la valeur spécifiée. De plus, s'il y a seulement 2 paires 
+ * d'accolades dans l'étiquette, encode l'étiquette.
+ */
 var substituerEtiquette = function (texte, etiquette, valeur) {
     var valeurCorrigee; 
-
     if (etiquette[2] != "{")
         valeurCorrigee = Entities.encode(valeur); 
     else 
         valeurCorrigee = valeur;
 
     var resultat = texte.split(etiquette).join(valeurCorrigee);
-
     return resultat;
 };
 
-/* TODO: update les liens de getIndex
-On prend template et on veut substituer des etiquettes
-*/
+
+/* Cette procédure ne prend aucun argument. Elle lit template et 
+ * retourne une page web identique, mais avec les étiquettes 
+ * remplacées par le contenu voulu.
+ */
 var getIndex = function () {
     var template = readFile("template/index.html");
 
@@ -336,10 +338,17 @@ var getIndex = function () {
     return avecImage; 
 };
 
+
+/* Cette procédure ne prend aucun argument. Elle lit la variable
+ * globale premieresPhrases, de type Array, puis de ce tableau
+ * retourne un des éléments, de type String.
+ */
 function getPhrase() {
     var index = Math.random() * premieresPhrases.length;
     return premieresPhrases[index >> 0]; // équivalent de floor
 }
+
+
 
 var getArticle = function(titre) {
 
@@ -354,36 +363,30 @@ var getArticle = function(titre) {
         "{{titre-2}}", titre.substring(titre.length >> 1));
     var introTitre = substituerEtiquette(introMoitie2,
         "{{titre}}", titre);
-    
-    var paragraphes = genererParagraphes(modele, 4,8,20).map(function(paragraphe){
 
-
-            // au lieu du code ci-dessus, on va pouvoir décommenter le code dans la ligne ci-dessous!
+    var paragraphes = genererParagraphes(modele, 4,8,20)
+        .map(function(paragraphe){
             return "<p>" + baliserPar(paragraphe) + "</p>\n"; 
         });
-    // je propose d'écrire une fonction qui va modifier les paragraphes en ajoutant
-    // les links dans 15% des cas, du genre baliser(paragraphe)
-	//JE suis d'accord
 
-    var contenu = introTitre + "\n" + paragraphes.join("\n");
-
-    var article = substituerEtiquette(avecImage, 
-        "{{{contenu}}}", contenu);
+    var contenu = introTitre + "\n" + paragraphes.join("\n"),
+        article = substituerEtiquette(avecImage, 
+            "{{{contenu}}}", contenu);
 
     return article;
 };
 
 function baliserMot(mot) {
     if (estValide(mot)){
-												//console.log("mot est valide");
-        var uniforme01=Math.random();
-        if(uniforme01<0.15) mot = balisage(mot,'strong');
-        else if(uniforme01<0.3) mot = balisage(mot,'em');
-        else if(uniforme01<0.45) mot = balisage(mot,'a');
+        var uniforme01 = Math.random();
+        if (uniforme01 < 0.15) 
+            mot = balisage(mot,'strong');
+        else if (uniforme01 < 0.3) 
+            mot = balisage(mot,'em');
+        else if (uniforme01 < 0.45) 
+            mot = balisage(mot,'a');
     }
-
-    return mot ; // TODO: ajouter tags <em> si valide. Pour l'instant ça retourne mot anyways 
-	//tag em est appelé en parametre pour balisage
+    return mot;
 }
 
 var balisage = function(mot,type){
@@ -418,7 +421,7 @@ function estValide(mot) {
         if (!((code < 91 && code > 64) || (code > 96 && code < 123)))
             return false;
     }
-    return true; //  TODO: trouver pk ça retourne tjrs false ////Ça marche now
+    return true; 
 }
 
 
@@ -472,9 +475,6 @@ http.createServer(function (requete, reponse) {
 
     sendPage(reponse, doc);
 }).listen(port);
-
-
-
 
 
 function tests(){
