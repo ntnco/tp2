@@ -383,7 +383,7 @@ function baliserMot(mot) {
 function baliserPar(paragraphe) {
     var tabParag = paragraphe.split(" "); 
     
-    var nouveauParag = tabParag
+    var nouveauParag = tabParag;
     return nouveauParag; // TODO: rendre ça legit et tester
 }
 
@@ -401,9 +401,6 @@ function estValide(mot) {
     }
     return true; //  TODO: insérer les bons nombres
 }
-
-
-writeFile("testArticle.html", getArticle("omgsoTitle"));
 
 
 
