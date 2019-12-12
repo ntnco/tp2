@@ -356,13 +356,7 @@ var getArticle = function(titre) {
         "{{titre}}", titre);
     
     var paragraphes = genererParagraphes(modele, 4,8,20).map(function(paragraphe){
-<<<<<<< HEAD
             return "<p>" + /*baliserPar(*/paragraphe/*)*/ + "</p>\n"; // baliserPar(paragraphe)
-=======
-            return "<p>" + /*baliser(*/paragraphe/*)*/ + "</p>\n"; // baliser(paragraphe)
-			/*Je propose */
-			
->>>>>>> bb867c5255d82a5d12e17de1c428235f9a01d9e7
         });
     // je propose d'écrire une fonction qui va modifier les paragraphes en ajoutant
     // les links dans 15% des cas, du genre baliser(paragraphe)
