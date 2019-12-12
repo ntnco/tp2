@@ -21,11 +21,8 @@ var writeFile = function (path, texte) {
 };
 
 
-/* C'est la fonction principale. Elle reçoit du texte : string 
- * et retourne un objet: {[strings], [enregistrements]}
- * 
- * L'objet retourné est un modèle de Markov qui suit les specs 
- * exigées dans l'énoncé.
+/* C'est la fonction principale. Reçoit du texte : string 
+ * Retourne un modèle de Markov: {[strings], [enregistrements]}
  */
 var creerModele = function(texte, r = 1) {
 
@@ -42,8 +39,10 @@ var creerModele = function(texte, r = 1) {
 };
 
 
-/* Cette méthode cherche un mot dans un tableau d'enregistrements
- * Elle retourne l'index de l'enregistrement contenant le mot ciblé. 
+/* Cette méthode cherche un motCible de type string 
+ * dans un tableau d'enregistrements.
+ * Elle retourne l'index, de type number, de l'enregistrement
+ * qui contient le motCible. 
  */
 Array.prototype.indexOfMot = function (motCible){
     for (var i = 0; i < this.length; i++)
@@ -94,10 +93,10 @@ function trouverProchains(dico, megaGroupes) {
 }
 
 /*
-Cette fonction prends un tableau de tableaux et retourne un tableau de même
-longueur qui contient les mêmes tableaux de mots que celui passé en paramètres
-à l'exception qu'ils sont plus court de 1 puisque l'on enlève le dernier 
-élément de chacun de ceux ci.+
+Cette fonction prend un tableau de tableaux et retourne un tableau de même
+longueur qui contient les mêmes tableaux de mots que celui passé en 
+paramètres à l'exception qu'ils sont plus court de 1 puisque l'on enlève 
+le dernier élément de chacun.
 */
 function toutSaufLesDerniers(tableau) {
     return [...new Set(tableau.map(function (elem) {
@@ -107,10 +106,10 @@ function toutSaufLesDerniers(tableau) {
 
 
 /* 
-Cette fonction reçoit un texte et va nous retrourner un tableau qui contient 
-tous les mots du texte en les séparant aux espaces et aux sauts-de-lignes. Elle
+Cette fonction reçoit un texte et retrourne un tableau qui contient 
+tous les mots du texte en les séparant aux espaces et aux sauts de ligne. Elle
 appliquera le traitement approprié dans chacun des cas.
- */
+*/
 function obtenirMots(texte) { 
     var mots = [],
         motActuel = "",
@@ -118,19 +117,19 @@ function obtenirMots(texte) {
     for (var i = 0; i < texte.length; i++) {
         caracActuel = texte.charAt(i);
         if (estEspaceOuRetour(caracActuel)) {   
-		
-			//Confirmer la fin d'un mot et l'ajouter à la liste
+
+            //Confirmer la fin d'un mot et l'ajouter à la liste
             if (!estEspaceOuRetour(caracPrecedent)) 
                 mots.push(motActuel); 
-				motActuel = "";
-				
-			//Traitement spécial en fin de ligne	
-			if (caracActuel == "\n")
+            motActuel = "";
+
+            //Traitement spécial en fin de ligne	
+            if (caracActuel == "\n")
                 mots.push(""); 
         } else {
             motActuel += caracActuel;
-			
-			//Traitement de fin de texte
+
+            //Traitement de fin de texte
             if (i == texte.length - 1)
                 mots.push(motActuel); 
         }
@@ -142,10 +141,11 @@ function obtenirMots(texte) {
 
 
 /* 
-Cette fonction reçoit un tableau de mots et un nombre n. Elle retourne tous les
-tableaux de n+1 mots consécutifs possibles et ne sera généralement pas unique
-pour une bonne taille de corpus
- */
+Cette fonction reçoit un tableau de mots et un nombre n. 
+Elle retourne tous les tableaux de n+1 mots consécutifs 
+possibles et ne sera généralement pas unique pour une 
+bonne taille de corpus.
+*/
 function grouper(mots, n) {
     var vides = Array(n).fill(""),
         tableauComplet = vides.concat(mots, vides),
@@ -185,20 +185,6 @@ function debutPropre(tableau){ //se fait appeler par megaGroupes
         if (tableau[i] != "") 
             break;
     return i;
-}
-
-
-
-// cette fonction retourne une Bool qui indique si les 2 tableaux
-// passés en arguments ont les mêmes valeurs.
-function sontIdentiques(tableau1, tableau2) {
-    if (tableau1.length != tableau2.length)
-        return false; // permet de gérer les tableaux vides.
-    for (var i = 0; i < tableau1.length; i++) {
-        if (tableau1[i] !== tableau2[i]) // doivent être de même type
-            return false;
-    }
-    return true;
 }
 
 
@@ -334,10 +320,6 @@ var tests = function() {
 
     // tests pour debutPropre(tableau)
     console.assert(debutPropre(["", "", "", "helloooooow"]) == 3);
-
-    // tests pour sontIdentiques(tableau1, tableau2)
-    console.assert(sontIdentiques([], []));
-    console.assert(sontIdentiques(["Barack Obama"], ["Barack Obama"]));
 
     // à noter que les fonctions qui génèrent des mots/phrases/paragraphes
     // ne sont pas à tester, car elles contiennent des données aléatoires.
