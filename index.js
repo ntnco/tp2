@@ -311,18 +311,18 @@ var substituerEtiquette = function (texte, etiquette, valeur) {
 };
 
 /* TODO: update les liens de getIndex
-On prends template et on veut substituer des etiquettes
+On prend template et on veut substituer des etiquettes
 */
 var getIndex = function () {
     var template = readFile("template/index.html");
 
     var titres = getRandomPageTitles(20),
-        tagDebut = "<li><a href=",
+        tagDebut = "<li><a href=\"article\\",
         tagFin = "</a></li>",
-        liens = Array(20).fill("\"lien\">");
+        liens = Array(20).fill("\">");
 
     var liensTitres = titres.map(function(elem, i) {
-        return tagDebut + liens[i] + elem + tagFin;
+        return tagDebut + elem + liens[i] + elem + tagFin;
     }).join("\n") + "\n";
 
     var resultat = substituerEtiquette(template, 
@@ -332,7 +332,7 @@ var getIndex = function () {
     var avecImage = substituerEtiquette(resultat, 
         "{{img}}", getImage());
     
-    writeFile("test.html", avecImage);
+    //writeFile("test.html", avecImage);
     return avecImage; 
 };
 
@@ -357,15 +357,34 @@ var getArticle = function(titre) {
     var introTitre = substituerEtiquette(introMoitie2,
         "{{titre}}", titre);
     
-    var paragraphes = genererParagraphes(modele, 4,8,20).map(function(elem){
-            return "<p>" + elem + "</p>\n"; 
+    var paragraphes = genererParagraphes(modele, 4,8,20).map(function(paragraphe){
+            return "<p>" + /*baliser(*/paragraphe/*)*/ + "</p>\n"; // baliser(paragraphe)
         });
+    // je propose d'écrire une fonction qui va modifier les paragraphes en ajoutant
+    // les links dans 15% des cas, du genre baliser(paragraphe)
+
     var contenu = introTitre + "\n" + paragraphes.join("\n");
 
     var article = substituerEtiquette(avecImage, 
         "{{{contenu}}}", contenu);
+
+    console.log(article);
     return article;
 };
+
+
+function baliser(paragraphe) {
+    var tabParag = paragraphe.split(" "); 
+    
+    var nouveauParag = tabParag
+    return nouveauParag; // TODO: rendre ça legit et tester
+}
+
+// reçoit un mot : String
+// retourne s'il est 7+ lettres et alphabétique
+function estValide(mot) {
+    return true; //  TODO: rendre cette fonction legit
+}
 
 
 writeFile("testArticle.html", getArticle("omgsoTitle"));
