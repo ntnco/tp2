@@ -359,9 +359,12 @@ var getArticle = function(titre) {
     
     var paragraphes = genererParagraphes(modele, 4,8,20).map(function(paragraphe){
             return "<p>" + /*baliser(*/paragraphe/*)*/ + "</p>\n"; // baliser(paragraphe)
+			/*Je propose */
+			
         });
     // je propose d'écrire une fonction qui va modifier les paragraphes en ajoutant
     // les links dans 15% des cas, du genre baliser(paragraphe)
+	//JE suis d'accord
 
     var contenu = introTitre + "\n" + paragraphes.join("\n");
 
