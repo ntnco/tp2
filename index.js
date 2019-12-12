@@ -357,12 +357,9 @@ var getArticle = function(titre) {
     
     var paragraphes = genererParagraphes(modele, 4,8,20).map(function(paragraphe){
 
-			/*var mots = paragraphe; // effacer ce code!
-			mots = mots.map(function(x,i){}); // effacer ce code!
-			mots.join(" ");*/ // effacer ce code!
 
             // au lieu du code ci-dessus, on va pouvoir décommenter le code dans la ligne ci-dessous!
-            return "<p>" + /*baliserPar(*/paragraphe/*)*/ + "</p>\n"; 
+            return "<p>" + baliserPar(paragraphe) + "</p>\n"; 
         });
     // je propose d'écrire une fonction qui va modifier les paragraphes en ajoutant
     // les links dans 15% des cas, du genre baliser(paragraphe)
@@ -380,13 +377,13 @@ function baliserMot(mot) {
     if (estValide(mot)){
         console.log("mot est valide");
         var uniforme01=Math.random();
-        if(uniforme01<0.15) mot = balisage(mot, 'strong');
+        if(uniforme01<0.15) mot = balisage(mot,'strong');
         else if(uniforme01<0.3) mot = balisage(mot,'em');
         else if(uniforme01<0.45) mot = balisage(mot,'a');
-
     }
 
     return mot ; // TODO: ajouter tags <em> si valide. Pour l'instant ça retourne mot anyways 
+	//tag em est appelé en parametre pour balisage
 }
 
 var balisage = function(mot,type){
@@ -400,9 +397,11 @@ var balisage = function(mot,type){
 
 function baliserPar(paragraphe) {
     var tabParag = paragraphe.split(" "); 
-    
-    var nouveauParag = tabParag;
-    return nouveauParag; // TODO: rendre ça legit et tester
+    var nouveauParag = tabParag.map(function(x){
+		if (estValide(x)) return baliserMot(x);
+		else return x;
+	});
+    return nouveauParag. join(" "); // TODO: rendre ça legit et tester
 }
 
 
@@ -418,7 +417,7 @@ function estValide(mot) {
         if (!((code < 91 && code > 64) || (code > 96 && code < 123)))
             return false;
     }
-    return true; //  TODO: trouver pk ça retourne tjrs false 
+    return true; //  TODO: trouver pk ça retourne tjrs false ////Ça marche now
 }
 
 
