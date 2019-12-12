@@ -49,8 +49,8 @@ var creerModele = function(texte, r = 1, trace) {
     return modele;
 };
 
-function t2() { // pour tester la chaine d'ordre 2
-    creerModele(readFile("corpus/trivial"), 2, true) 
+function t2() { // pour Tester la chaine d'ordre 2
+    creerModele(readFile("corpus/exemple"), 2, true) 
 }
 
 
@@ -216,7 +216,7 @@ var genererProchainMot = function(modele, motActuel) {
         prochainsPossibles = modele.prochainsMots[index],
         nombreHasard = Math.random(), 
         cumul = 0;
-    if (prochainsPossibles.length == 0)
+    if (prochainsPossibles.length === 0)
         return null;
     for (cas of prochainsPossibles) {
         cumul += cas.prob;
