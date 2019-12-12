@@ -24,7 +24,7 @@ var writeFile = function (path, texte) {
 /* C'est la fonction principale. Reçoit du texte : string 
  * Retourne un modèle de Markov: {[strings], [enregistrements]}
  */
-var creerModele = function(texte, r = 1) {
+var creerModele = function(texte, r = 1, trace) {
 
     var mots = obtenirMots(texte), 
         groupes = grouper(mots, r),
@@ -35,8 +35,23 @@ var creerModele = function(texte, r = 1) {
     modele.prochainsMots = trouverProchains(modele.dictionnaire, 
         megaGroupes);
 
+    // pour déboguer la chaine d'ordre r, ne s'applique que 
+    // si le 3e argument de creerModele() est true.
+    if (trace) {
+        console.log(groupes);
+        console.log(megaGroupes);
+        console.log("dictionnaire");
+        console.table(modele.dictionnaire);
+        console.log("prochainsMots");
+        console.table(modele.prochainsMots);
+    }
+
     return modele;
 };
+
+function t2() { // pour tester la chaine d'ordre 2
+    creerModele(readFile("corpus/trivial"), 2, true) 
+}
 
 
 /* Cette méthode cherche un motCible de type string 
