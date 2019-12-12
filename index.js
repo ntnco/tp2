@@ -373,6 +373,20 @@ var getArticle = function(titre) {
 };
 
 
+function baliser(paragraphe) {
+    var tabParag = paragraphe.split(" "); 
+    
+    var nouveauParag = tabParag
+    return nouveauParag; // TODO: rendre ça legit et tester
+}
+
+// reçoit un mot : String
+// retourne s'il est 7+ lettres et alphabétique
+function estValide(mot) {
+    return true; //  TODO: rendre cette fonction legit
+}
+
+
 writeFile("testArticle.html", getArticle("omgsoTitle"));
 
 
