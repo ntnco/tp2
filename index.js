@@ -402,7 +402,7 @@ function estValide(mot) {
 
     for (var i = 0; i < mot.length; i++) {
         var code = mot.charCodeAt(i);
-        if (!(code < 112 && code > 64 && code > 96 && code < 87))
+        if (!(code < 91 && code > 64 && code > 96 && code < 123))
             return false;
     }
     return true; //  TODO: insérer les bons nombres
