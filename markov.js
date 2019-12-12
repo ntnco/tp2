@@ -1,15 +1,13 @@
 //// Auteurs:
 // Emma Parent-Senez, 20071506
 // Antoine Colson-Ratelle, 990432
-
-// Roadmap
-// 1. commencer la fonction genererProchainMot()
-// 2. commencer la fonction genererPhrase()
-// 3. commencer la fonction genererParagraphes()
-// 4. TODO: s'assurer que 1 à 3 fonctionnent bien avec les données wiki
-// 4. TODO: une fois que ces fonctions sont codées, on verra si
-//          le code qu'on a déjà fonctionne même avec ordre-r
-
+/*
+Ce code a été conçu pour le vendredi 13 décembre 2019 et il sert a créer des
+chaines(modèles) de Markov et de générer des paragraphes de texte structurés
+respectant un nombre défini de mots par ligne et de lignes par paragraphes en 
+respectant que les phrases commencent par des débuts de phrases de notre corpus
+et doivent s'arrêter en présence d'un mot de fin de phrase.
+*/
 
 // Utilitaires pour manipuler des fichiers
 var fs = require("fs");
@@ -31,7 +29,7 @@ var writeFile = function (path, texte) {
  */
 var creerModele = function(texte, r = 1) {
 
-    var mots = obtenirMots(texte), // sépare sur les " " et les "\n"
+    var mots = obtenirMots(texte), 
         groupes = grouper(mots, r),
         megaGroupes = megaGrouper(mots, r),
         modele = {};
@@ -40,16 +38,9 @@ var creerModele = function(texte, r = 1) {
     modele.prochainsMots = trouverProchains(modele.dictionnaire, 
         megaGroupes);
 
-    /*console.log(mots);
-        console.table(groupes);
-        console.table(megaGroupes);
-    console.log("dictionnaire:"); console.table(modele.dictionnaire);
-    console.log("prochainsMots:"); console.table(modele.prochainsMots);*/
-
     return modele;
 };
 
-//creerModele(readFile("corpus/trivial"), 2)
 
 /* Cette méthode cherche un mot dans un tableau d'enregistrements
  * Elle retourne l'index de l'enregistrement contenant le mot ciblé. 
@@ -62,19 +53,19 @@ Array.prototype.indexOfMot = function (motCible){
 }
 
 
-/* Cette fonction reçoit 2 tableaux:
- * 1. Le premier tableau contient des strings
- * 2. Le deuxième tableau contient des paires de strings
- *    Le 1er élément de la paire est les r éléments qui précèdent un mot
- *    Le 2e élément de la paire est ce mot.
- *
- * Elle retourne un tableau d'enregistrements en comptant les occurences 
- * (Probas?)du 2e élément du 2e tableau.
- *
- * Pour comprendre le fonctionnement de cette fonction, il est important
- * de savoir que l'argument megaGroupes contient des paires de 2 strings:
- * a) la 1re string contient les mots précédents
- * b) la 2e string contient le mot actuel.
+/* Cette fonction reçoit 2 tableaux en paramètres:
+  1. Le premier tableau contient des strings
+  2. Le deuxième tableau contient des paires de strings
+     Le 1er élément de la paire est les r éléments qui précèdent un mot
+     Le 2e élément de la paire est ce mot.
+ 
+  Elle retourne un tableau d'enregistrements en comptant les occurences 
+  (Probas?)du 2e élément du 2e tableau.
+ 
+  Pour comprendre le fonctionnement de cette fonction, il est important
+  de savoir que l'argument megaGroupes contient des paires de 2 strings:
+  a) la 1re string contient les mots précédents
+  b) la 2e string contient le mot actuel.
  */
 function trouverProchains(dico, megaGroupes) {
     var resultat = [],
@@ -102,7 +93,12 @@ function trouverProchains(dico, megaGroupes) {
     return resultat;
 }
 
-//
+/*
+Cette fonction prends un tableau de tableaux et retourne un tableau de même
+longueur qui contient les mêmes tableaux de mots que celui passé en paramètres
+à l'exception qu'ils sont plus court de 1 puisque l'on enlève le dernier 
+élément de chacun de ceux ci.+
+*/
 function toutSaufLesDerniers(tableau) {
     return [...new Set(tableau.map(function (elem) {
         return elem.slice(0, elem.length - 1).join(" ");
@@ -110,13 +106,10 @@ function toutSaufLesDerniers(tableau) {
 }
 
 
-/* reçoit du texte : string
- * => retourne un tableau de tous les mots de ce texte : [strings]
- *
- * fonctionnement: traverse chaque caractère et les ajoute à la 
- * variable motActuel. Lorsqu'elle frappe une espace ou un retour à la ligne,
- * elle pousse motActuel dans le tableau des mots à retourner, puis 
- * réassigne motActuel à une string vide "".
+/* 
+Cette fonction reçoit un texte et va nous retrourner un tableau qui contient 
+tous les mots du texte en les séparant aux espaces et aux sauts-de-lignes. Elle
+appliquera le traitement approprié dans chacun des cas.
  */
 function obtenirMots(texte) { 
     var mots = [],
@@ -124,16 +117,22 @@ function obtenirMots(texte) {
         caracActuel, caracPrecedent;
     for (var i = 0; i < texte.length; i++) {
         caracActuel = texte.charAt(i);
-        if (estEspaceOuRetour(caracActuel)) {  // si " " ou "\n" 
+        if (estEspaceOuRetour(caracActuel)) {   
+		
+			//Confirmer la fin d'un mot et l'ajouter à la liste
             if (!estEspaceOuRetour(caracPrecedent)) 
-                mots.push(motActuel); // car fin du mot
+                mots.push(motActuel); 
 				motActuel = "";
+				
+			//Traitement spécial en fin de ligne	
 			if (caracActuel == "\n")
-                mots.push(""); // signale un début et une fin de phrase
+                mots.push(""); 
         } else {
             motActuel += caracActuel;
+			
+			//Traitement de fin de texte
             if (i == texte.length - 1)
-                mots.push(motActuel); // car fin du texte
+                mots.push(motActuel); 
         }
         caracPrecedent = caracActuel;
     }
@@ -142,8 +141,10 @@ function obtenirMots(texte) {
 }
 
 
-/* cette fonction reçoit un tableau de mots [strings]
- * et retourne tous les tableaux de n mots consécutifs [[strings]]
+/* 
+Cette fonction reçoit un tableau de mots et un nombre n. Elle retourne tous les
+tableaux de n+1 mots consécutifs possibles et ne sera généralement pas unique
+pour une bonne taille de corpus
  */
 function grouper(mots, n) {
     var vides = Array(n).fill(""),
@@ -156,15 +157,10 @@ function grouper(mots, n) {
 }
 
 
-/* cette fonction reçoit un tableau de mots [strings]
- * et retourne un tableau de la forme [[string, string]]
- * 
- * Le tableau retourné représente les n mots consécutifs,
- * suivis du mot qui les suit.
- *
- * Les "mégaGroupes" obtenus ne sont pas nécessairement 
- * uniques, au contraire, ils sont exhaustifs. Ça permettra
- * de compter les occurences de leur mot final plus tard.
+/* 
+Cette fonction reçoit un tableau de mots et va nous rendre une série de 
+tableaux de taille 2 qui contiendront une suite de n mots et le mot suivant
+possible. Ils ne seront pas nécéssairement uniques.
  */
 function megaGrouper(mots, n) {
     var megaGroupes = grouper(mots, n),
@@ -177,7 +173,9 @@ function megaGrouper(mots, n) {
 }
 
 
-/* Cette fonction reçoit un tableau [strings]
+/* 
+Cette fonction reçoit un tableau de mots et retourne le premier index du dit 
+tableau qui n'est pas un 
  * et retourne le premier index où ce tableau ne commence pas
  * par une chaine vide. Type du retour: number
  */
@@ -189,16 +187,6 @@ function debutPropre(tableau){ //se fait appeler par megaGroupes
     return i;
 }
 
-
-// cette fonction donne l'index d'un sous-tableau dans un tableau 2D
-// elle ne devrait jamais retourner -1 dans le cadre de cet exercice.
-Array.prototype.indexOfArrays = function (sousTableau) {
-    for (var i = 0; i < this.length; i++) {
-        if (sontIdentiques(sousTableau, this[i]))
-            return i;
-    }     
-    return -1;
-}
 
 
 // cette fonction retourne une Bool qui indique si les 2 tableaux
