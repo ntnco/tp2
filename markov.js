@@ -220,7 +220,10 @@ var genererProchainMot = function(modele, motActuel) {
 };
 
 
-
+/*
+Va générer des phrases en utilisant le modèle avec des contraintes de longueur 
+et de débuts et fin de phrases
+*/
 var genererPhrase = function(modele, maxNbMots) {
     var prochainMot,
         phrase = [];
@@ -239,8 +242,10 @@ var genererPhrase = function(modele, maxNbMots) {
 };
 
 
-/* Cette fonction reçoit un modèle (objet) et 3 nombres.
- * Elle retourne une String
+/*
+Cette dernière fonction génère nos paragraphes avec les critères de nombres de
+mots par phrase, nombre de phrases par paragraphes et quantité de paragraphes
+désirés à partir de notre modèle de Markov.
  */
 var genererParagraphes = function(modele, nbParagraphes, maxNbPhrases, maxNbMots) {
     var paragraphes = [],
