@@ -311,18 +311,18 @@ var substituerEtiquette = function (texte, etiquette, valeur) {
 };
 
 /* TODO: update les liens de getIndex
-On prends template et on veut substituer des etiquettes
+On prend template et on veut substituer des etiquettes
 */
 var getIndex = function () {
     var template = readFile("template/index.html");
 
     var titres = getRandomPageTitles(20),
-        tagDebut = "<li><a href=",
+        tagDebut = "<li><a href=\"article\\",
         tagFin = "</a></li>",
-        liens = Array(20).fill("\"lien\">");
+        liens = Array(20).fill("\">");
 
     var liensTitres = titres.map(function(elem, i) {
-        return tagDebut + liens[i] + elem + tagFin;
+        return tagDebut + elem + liens[i] + elem + tagFin;
     }).join("\n") + "\n";
 
     var resultat = substituerEtiquette(template, 
@@ -332,7 +332,7 @@ var getIndex = function () {
     var avecImage = substituerEtiquette(resultat, 
         "{{img}}", getImage());
     
-    writeFile("test.html", avecImage);
+    //writeFile("test.html", avecImage);
     return avecImage; 
 };
 
@@ -364,6 +364,8 @@ var getArticle = function(titre) {
 
     var article = substituerEtiquette(avecImage, 
         "{{{contenu}}}", contenu);
+
+    console.log(article);
     return article;
 };
 
