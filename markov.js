@@ -373,7 +373,3 @@ if (require.main === module) {
     exports.creerModele = creerModele;
     exports.genererParagraphes = genererParagraphes;
 }
-
-
-
-creerModele(readFile("corpus/eros")); //////////à effacer pour remise                                                           //////////////////////////////////////////////////////

@@ -281,7 +281,8 @@ var sendPage = function (reponse, page) {
 -------------------------------------------------------------------------------
 */
 
-
+// variable globale du modèle
+var modele = creerModele(readFile("corpus/eros"))
 
 
 // -------------------------------------
@@ -356,11 +357,10 @@ var getArticle = function(titre) {
     var introTitre = substituerEtiquette(introMoitie2,
         "{{titre}}", titre);
     
-    var modele = creerModele(readFile("corpus/eros")),
-        paragraphes = genererParagraphes(modele, 5,3,20).map(function(elem){
-            return "<p>" + elem + "</p>"; 
+    var paragraphes = genererParagraphes(modele, 4,8,20).map(function(elem){
+            return "<p>" + elem + "</p>\n"; 
         });
-    var contenu = introTitre + "\n" + paragraphes.join("\n") + "\n";
+    var contenu = introTitre + "\n" + paragraphes.join("\n");
 
     var article = substituerEtiquette(avecImage, 
         "{{{contenu}}}", contenu);
