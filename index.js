@@ -357,9 +357,12 @@ var getArticle = function(titre) {
     var introTitre = substituerEtiquette(introMoitie2,
         "{{titre}}", titre);
     
-    var paragraphes = genererParagraphes(modele, 4,8,20).map(function(elem){
-            return "<p>" + elem + "</p>\n"; 
+    var paragraphes = genererParagraphes(modele, 4,8,20).map(function(paragraphe){
+            return "<p>" + /*baliser(*/paragraphe/*)*/ + "</p>\n"; // baliser(paragraphe)
         });
+    // je propose d'écrire une fonction qui va modifier les paragraphes en ajoutant
+    // les links dans 15% des cas, du genre baliser(paragraphe)
+
     var contenu = introTitre + "\n" + paragraphes.join("\n");
 
     var article = substituerEtiquette(avecImage, 
