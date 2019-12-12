@@ -372,11 +372,24 @@ var getArticle = function(titre) {
 };
 
 function baliserMot(mot) {
-    if (estValide(mot))
-        console.log("mot est valide");
+    if (estValide(mot)){
+		console.log("mot est valide");
+		var uniforme01=Math.random();
+		if(uniforme01<0.15) mot = balisage(mot, 'strong');
+		else if(uniforme01<0.3) mot = balisage(mot,'em');
+		else if(uniforme01<0.45) mot = balisage(mot,'a');
+
+	}
 
     return mot ; // TODO: ajouter tags <em> si valide. Pour l'instant ça retourne mot anyways 
 }
+
+var balisage= function(mot,type){
+	if(type=='a'){
+		return <type href= >mot<\type>;
+	}
+	return <type>mot</type>;
+};
 
 
 function baliserPar(paragraphe) {
