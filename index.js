@@ -375,7 +375,7 @@ var getArticle = function(titre) {
 
 function baliserMot(mot) {
     if (estValide(mot)){
-        console.log("mot est valide");
+												//console.log("mot est valide");
         var uniforme01=Math.random();
         if(uniforme01<0.15) mot = balisage(mot,'strong');
         else if(uniforme01<0.3) mot = balisage(mot,'em');
@@ -388,7 +388,8 @@ function baliserMot(mot) {
 
 var balisage = function(mot,type){
     if(type=='a')
-        return "<" + type +"href= article/" + mot + ">" 
+		//	Transformer première lettre de mot en maj pour chercher la page?
+        return "<" + type +" href= /" + mot + ">" 
             + mot + "</" + type + ">";
     else 
         return "<" + type + ">" + mot + "</" + type + ">";
