@@ -291,7 +291,7 @@ var sendPage = function (reponse, page) {
 */
 
 // variable globale du modèle
-var modele = creerModele(readFile("corpus/wikipedia"), true)
+var modele = creerModele(readFile("corpus/eros"), true)
 
 
 // -------------------------------------
