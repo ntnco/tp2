@@ -1,3 +1,12 @@
+//// Auteurs:
+// Emma Parent-Senez, 20071506
+// Antoine Colson-Ratelle, 990432
+//Et la personne à la base du code donné
+/*
+Ce code a été conçu pour le vendredi 13 décembre 2019 et à la section demandée
+sert à afficher le contenu désiré sur une page html 
+*/
+
 'use strict';
 
 var http = require("http");
@@ -291,13 +300,9 @@ var modele = creerModele(readFile("corpus/wikipedia"), true)
 //       MODIFIER EST CI-DESSOUS
 // -------------------------------------
 
-/* Reçoit 3 inputs:
- *     texte de type String
- *     etiquette de type String
- *     valeur de type String
- * Retourne un texte où les étiquettes ont été remplacées par 
- * la valeur spécifiée. De plus, s'il y a seulement 2 paires 
- * d'accolades dans l'étiquette, encode l'étiquette.
+/* 
+Cette fonction sert a remplacer des etiquettes des pages html fournies pour 
+les valeurs désirées. Elle est utilisée maintes fois.
  */
 var substituerEtiquette = function (texte, etiquette, valeur) {
     var valeurCorrigee; 
@@ -311,9 +316,10 @@ var substituerEtiquette = function (texte, etiquette, valeur) {
 };
 
 
-/* Cette procédure ne prend aucun argument. Elle lit template et 
- * retourne une page web identique, mais avec les étiquettes 
- * remplacées par le contenu voulu.
+/* 
+Fonction qui va chercher notre page index(accueil) et va remplacer les 
+étiquettes de départ avec les valeurs appropriées comme afficher une liste
+d'articles récents(ici randomisée) et une image du jour
  */
 var getIndex = function () {
     var template = readFile("template/index.html");
@@ -339,9 +345,8 @@ var getIndex = function () {
 };
 
 
-/* Cette procédure ne prend aucun argument. Elle lit la variable
- * globale premieresPhrases, de type Array, puis de ce tableau
- * retourne un des éléments, de type String.
+/* 
+HELP
  */
 function getPhrase() {
     var index = Math.random() * premieresPhrases.length;
@@ -349,7 +354,11 @@ function getPhrase() {
 }
 
 
-
+/*
+Fonction qui va chercher notre page d'article et la personnalise au titre 
+désiré avec une image randomisée et utilise la fonction genererParagraphes de
+notre modele de Markov pour generer du texte aleatoire
+*/
 var getArticle = function(titre) {
 
     var template = readFile("template/article.html"),
@@ -363,7 +372,9 @@ var getArticle = function(titre) {
         "{{titre-2}}", titre.substring(titre.length >> 1));
     var introTitre = substituerEtiquette(introMoitie2,
         "{{titre}}", titre);
-
+	
+	
+	//On fait un map sur nos paragraphes pour les baliser correctement
     var paragraphes = genererParagraphes(modele, 4,8,20)
         .map(function(paragraphe){
             return "<p>" + baliserPar(paragraphe) + "</p>\n"; 
@@ -376,6 +387,9 @@ var getArticle = function(titre) {
     return article;
 };
 
+
+//Fonction qui détermine si un mot de longueur suffisante devrait apparaître 
+//avec une esthétique particulière et si oui lui appelle un balisage
 function baliserMot(mot) {
     if (estValide(mot)){
         var uniforme01 = Math.random();
@@ -389,6 +403,8 @@ function baliserMot(mot) {
     return mot;
 }
 
+
+//Fonction qui balise les mots passés en paramètres selon le type désiré
 var balisage = function(mot,type){
     if(type=='a')
 		//	Transformer première lettre de mot en maj pour chercher la page?
@@ -398,7 +414,7 @@ var balisage = function(mot,type){
         return "<" + type + ">" + mot + "</" + type + ">";
 };
 
-
+//Fonction qui traite les paragraphes pour chercher les bons mots a baliser
 function baliserPar(paragraphe) {
     var tabParag = paragraphe.split(" "); 
     var nouveauParag = tabParag.map(function(x){
@@ -409,8 +425,8 @@ function baliserPar(paragraphe) {
 }
 
 
-// reçoit un mot : String
-// retourne s'il est 7+ lettres et alphabétique : Bool
+/
+//reçoit un mot et retourne true s'il a au moins une longueur de 7
 function estValide(mot) {
     if (mot.length < 7)
         return false;

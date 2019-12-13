@@ -24,6 +24,7 @@ var writeFile = function (path, texte) {
 // ceci est la constante r utilisée pour choisir l'ordre de Markov.
 var r = 3;
 
+
 /* C'est la fonction principale. Reçoit du texte : string 
  * Retourne un modèle de Markov: {[strings], [enregistrements]}
  */
