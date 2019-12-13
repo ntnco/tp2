@@ -282,7 +282,7 @@ var sendPage = function (reponse, page) {
 */
 
 // variable globale du modèle
-var modele = creerModele(readFile("corpus/eros"))
+var modele = creerModele(readFile("corpus/eros"), true)
 
 
 // -------------------------------------
@@ -478,7 +478,7 @@ http.createServer(function (requete, reponse) {
 
 
 function tests(){
-    console.assert(substituerEtiquette("hellooooo {{{tacos}}} ", 
+    console/assert(substituerEtiquette("hellooooo {{{tacos}}} ", 
         "{{{tacos}}}", "<taco>🌮</taco>") == 'hellooooo <taco>🌮</taco> ');
     console.assert(substituerEtiquette("hellooooo {{{tacos}}} ", 
         "{{tacos}}", "<taco>🌮</taco>") == 'hellooooo {&lt;taco&gt;🌮&lt;/taco&gt;} ');
