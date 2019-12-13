@@ -1,3 +1,12 @@
+//// Auteurs:
+// Emma Parent-Senez, 20071506
+// Antoine Colson-Ratelle, 990432
+//Et la personne à la base du code donné
+/*
+Ce code a été conçu pour le vendredi 13 décembre 2019 et à la section demandée
+sert à afficher le contenu désiré sur une page html 
+*/
+
 'use strict';
 
 var http = require("http");
@@ -291,13 +300,9 @@ var modele = creerModele(readFile("corpus/eros"))
 //       MODIFIER EST CI-DESSOUS
 // -------------------------------------
 
-/* Reçoit 3 inputs:
- *     texte de type String
- *     etiquette de type String
- *     valeur de type String
- * Retourne un texte où les étiquettes ont été remplacées par 
- * la valeur spécifiée. De plus, s'il y a seulement 2 paires 
- * d'accolades dans l'étiquette, encode l'étiquette.
+/* 
+Cette fonction sert a remplacer des etiquettes des pages html fournies pour 
+les valeurs désirées. Elle est utilisée maintes fois.
  */
 var substituerEtiquette = function (texte, etiquette, valeur) {
     var valeurCorrigee; 
@@ -311,9 +316,10 @@ var substituerEtiquette = function (texte, etiquette, valeur) {
 };
 
 
-/* Cette procédure ne prend aucun argument. Elle lit template et 
- * retourne une page web identique, mais avec les étiquettes 
- * remplacées par le contenu voulu.
+/* 
+Fonction qui va chercher notre page index(accueil) et va remplacer les 
+étiquettes de départ avec les valeurs appropriées comme afficher une liste
+d'articles récents(ici randomisée) et une image du jour
  */
 var getIndex = function () {
     var template = readFile("template/index.html");
@@ -339,9 +345,8 @@ var getIndex = function () {
 };
 
 
-/* Cette procédure ne prend aucun argument. Elle lit la variable
- * globale premieresPhrases, de type Array, puis de ce tableau
- * retourne un des éléments, de type String.
+/* 
+
  */
 function getPhrase() {
     var index = Math.random() * premieresPhrases.length;
