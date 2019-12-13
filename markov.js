@@ -226,9 +226,11 @@ Cette fonction obtient l'indice du mot actuel en parcourant le dictionnaire et
 parcoure les possibilités du prochain mot déterminé aléatoirement
 */
 var genererProchainMot = function(modele, motActuel) {
+	console.log(motActuel);
     var index = modele.dictionnaire.indexOf(motActuel),
         prochainsPossibles = modele.prochainsMots[index],
         cumul = 0;
+	console.log("index ", index);
     //console.log(motActuel);
     //console.table(prochainsPossibles)
     if (prochainsPossibles.length == 0) {
