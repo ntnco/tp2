@@ -1,13 +1,13 @@
-//// Auteurs:
+// Auteurs:
 // Emma Parent-Senez, 20071506
 // Antoine Colson-Ratelle, 990432
-/*
-Ce code a été conçu pour le vendredi 13 décembre 2019 et il sert a créer des
-chaines(modèles) de Markov et de générer des paragraphes de texte structurés
-respectant un nombre défini de mots par ligne et de lignes par paragraphes en 
-respectant que les phrases commencent par des débuts de phrases de notre corpus
-et doivent s'arrêter en présence d'un mot de fin de phrase.
-*/
+
+/* Ce code est remis le vendredi 13 décembre 2019. Sert a créer des
+ * chaines(modèles) de Markov et générer des paragraphes de texte structurés
+ * respectant un nombre défini de mots par ligne et de lignes par paragraphes en 
+ * respectant que les phrases commencent par des débuts de phrases de notre 
+ * corpus et doivent s'arrêter en présence d'un mot de fin de phrase.
+ */
 
 // Utilitaires pour manipuler des fichiers
 var fs = require("fs");
@@ -22,7 +22,8 @@ var writeFile = function (path, texte) {
 
 
 // ceci est la constante r utilisée pour choisir l'ordre de Markov.
-var r = 1;
+// initialisée ici à 2, vous pouvez la modifier à votre guise
+var r = 2;
 
 
 /* C'est la fonction principale. Reçoit du texte : string 
@@ -36,14 +37,8 @@ var creerModele = function(texte) {
         modele = {};
 
     modele.dictionnaire = toutSaufLesDerniers(megaGroupes);
-
     modele.prochainsMots = trouverProchains(modele.dictionnaire, 
         megaGroupes);
-
-
-    // pour déboguer la chaine d'ordre r, ne s'applique que 
-    // si le 3e argument de creerModele() est true.
-
 
     return modele;
 };
@@ -62,10 +57,9 @@ Array.prototype.indexOfMot = function (motCible){
 }
 
 
-/* 
- Cette fonction va retourner un tableau d'enregistrement de prochains mots
- possibles avec leurs probabilités respectives a partir de notre dictionnaire
- et de nos groupes de mots.
+/* Cette fonction va retourner un tableau d'enregistrement de prochains mots
+ * possibles avec leurs probabilités respectives a partir de notre 
+ * dictionnaire et de nos groupes de mots.
  */
 function trouverProchains(dico, megaGroupes) {
     var resultat = [],
@@ -93,12 +87,12 @@ function trouverProchains(dico, megaGroupes) {
     return resultat;
 }
 
-/*
-Cette fonction prend un tableau de tableaux et retourne un tableau de même
-longueur qui contient les mêmes tableaux de mots que celui passé en 
-paramètres à l'exception qu'ils sont plus court de 1 puisque l'on enlève 
-le dernier élément de chacun.
-*/
+
+/* Cette fonction prend un tableau de tableaux et retourne un tableau de même
+ * longueur qui contient les mêmes tableaux de mots que celui passé en 
+ * paramètres à l'exception qu'ils sont plus court de 1 puisqu'on enlève 
+ * le dernier élément de chacun.
+ */
 function toutSaufLesDerniers(tableau) {
     return [...new Set(tableau.map(function (elem) {
         return elem.slice(0, elem.length - 1).join(" ");
@@ -106,11 +100,10 @@ function toutSaufLesDerniers(tableau) {
 }
 
 
-/* 
-Cette fonction reçoit un texte et retourne un tableau qui contient 
-tous les mots du texte en les séparant aux espaces et aux sauts de ligne. Elle
-applique le traitement approprié dans chacun des cas.
-*/
+/* Cette fonction reçoit un texte et retourne un tableau qui contient 
+ * tous les mots du texte en les séparant aux espaces et aux sauts de ligne. Elle
+ * applique le traitement approprié dans chacun des cas.
+ */
 function obtenirMots(texte) { 
     var mots = [],
         motActuel = "",
@@ -138,18 +131,15 @@ function obtenirMots(texte) {
         }
         caracPrecedent = caracActuel;
     }
-    //console.table(mots);
-
     return mots;
 }
 
 
-/* 
-Cette fonction reçoit un tableau de mots et un nombre n. 
-Elle retourne tous les tableaux de n+1 mots consécutifs 
-possibles et ne sera généralement pas unique pour une 
-bonne taille de corpus.
-*/
+/* Cette fonction reçoit un tableau de mots et un nombre n. 
+ * Elle retourne tous les tableaux de n+1 mots consécutifs 
+ * possibles et ne sera généralement pas unique pour une 
+ * bonne taille de corpus.
+ */
 function grouper(mots, n) {
     var vides = Array(n).fill(""),
         tableauComplet = vides.concat(mots, vides),
@@ -161,10 +151,9 @@ function grouper(mots, n) {
 }
 
 
-/* 
-Cette fonction reçoit un tableau de mots et va nous rendre une série de 
-tableaux de taille 2 qui contiendront une suite de n mots et le mot suivant
-possible. Ils ne seront pas nécéssairement uniques.
+/* Cette fonction reçoit un tableau de mots et va nous rendre une série de 
+ * tableaux de taille 2 qui contiendront une suite de n mots et le mot suivant
+ * possible. Ils ne seront pas nécéssairement uniques.
  */
 function megaGrouper(mots, n) {
     var megaGroupes = grouper(mots, n),
@@ -177,9 +166,8 @@ function megaGrouper(mots, n) {
 }
 
 
-/* 
-Cette fonction reçoit un tableau de mots et retourne le premier index du dit 
-tableau qui n'est pas un caractère de vide
+/* Cette fonction reçoit un tableau de mots et retourne le premier index du dit 
+ * tableau qui n'est pas un caractère de vide
  */
 function debutPropre(tableau){ 
     var i;
@@ -190,17 +178,17 @@ function debutPropre(tableau){
 }
 
 
-//Fonction qui retourne vrai si le caractère envoyé est un espace ou un saut de
-// ligne
+/* Fonction qui retourne vrai si le caractère envoyé est un espace ou un saut de
+ * ligne
+ */
 function estEspaceOuRetour(caract) {
     return (caract == " " || caract == "\n"); 
 }
 
 
-/* 
-Cette fonction obtient l'indice du mot actuel en parcourant le dictionnaire et 
-parcoure les possibilités du prochain mot déterminé aléatoirement
-*/
+/* Cette fonction obtient l'indice du mot actuel en parcourant le dictionnaire et 
+ * parcoure les possibilités du prochain mot déterminé aléatoirement
+ */
 var genererProchainMot = function(modele, motActuel) {
 
     var index = modele.dictionnaire.indexOf(motActuel),
@@ -218,10 +206,9 @@ var genererProchainMot = function(modele, motActuel) {
 };
 
 
-/*
-Va générer des phrases en utilisant le modèle avec des contraintes de longueur 
-et de débuts et fin de phrases
-*/
+/* Va générer des phrases en utilisant le modèle avec des contraintes de longueur 
+ * et de débuts et fin de phrases
+ */
 var genererPhrase = function(modele, maxNbMots) {
     var prochainMot,
         phrase = [];
@@ -240,10 +227,9 @@ var genererPhrase = function(modele, maxNbMots) {
 };
 
 
-/*
-Cette dernière fonction génère nos paragraphes avec les critères de nombres de
-mots par phrase, nombre de phrases par paragraphes et quantité de paragraphes
-désirés à partir de notre modèle de Markov.
+/* Cette dernière fonction génère nos paragraphes avec les critères de nombres de
+ * mots par phrase, nombre de phrases par paragraphes et quantité de paragraphes
+ * désirés à partir de notre modèle de Markov.
  */
 var genererParagraphes = function(modele, nbParagraphes, maxNbPhrases, maxNbMots) {
     var paragraphes = [],
@@ -264,11 +250,7 @@ var genererParagraphes = function(modele, nbParagraphes, maxNbPhrases, maxNbMots
 
 
 var tests = function() {
-    /* Les tests seront lancés automatiquement si vous appelez ce
-     * fichier avec : 
-     * node markov.js
-     */
-    
+
     // tests pour creerModele()
     console.assert(JSON.stringify(creerModele("no more tacos")) ==
         '{"dictionnaire":["","no","more","tacos"],'+

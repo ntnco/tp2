@@ -91,8 +91,9 @@ var jsonRequestSync = function(url) {
  * Wikipédia français
  */
 var getRandomPageTitles = function(n) {
-    var req = jsonRequestSync('https://fr.wikipedia.org/w/api.php?action=query&list=random&rnnamespace=0&rnlimit=' + n + '&format=json');
-
+    var req = jsonRequestSync('https://fr.wikipedia.org/w/'+
+        'api.php?action=query&list=random&rnnamespace=0&rnlimit=' +
+        n + '&format=json');
     if(!req) {
         return Array(n).fill("Pas d'internet");
     }
@@ -115,7 +116,8 @@ var fileUrl = function(wikipediaName) {
 
     var hash = md5(filename).slice(0, 2);
 
-    return "https://upload.wikimedia.org/wikipedia/commons/" + hash[0] + '/' + hash + '/' + filename;
+    return "https://upload.wikimedia.org/wikipedia/commons/" + 
+        hash[0] + '/' + hash + '/' + filename;
 };
 
 /*
@@ -126,7 +128,7 @@ var getPageFirstImage = function(title) {
     var encodedTitle = encodeURIComponent(title);
 
     var pageUrl = "https://fr.wikipedia.org/w/api.php?action=query&titles=" +
-                  encodedTitle + "&format=json&prop=images&imlimit=30";
+        encodedTitle + "&format=json&prop=images&imlimit=30";
 
     var req = jsonRequestSync(pageUrl);
 
@@ -253,16 +255,18 @@ var getDocument = function (url) {
 
     try {
         if(['.png', '.jpg'].indexOf(parsedPath.ext) !== -1) {
-            result.data = readFile('./public' + pathname, {encoding: 'binary'});
+            result.data = readFile('./public' + 
+                pathname, {encoding: 'binary'});
             result.encoding = 'binary';
         } else {
             result.data = readFile('./public' + pathname);
         }
-        console.log('['+new Date().toLocaleString('iso') + "] GET " + url.path);
+        console.log('['+new Date().toLocaleString('iso') + 
+            "] GET " + url.path);
     } catch (e) {
         // File not found.
         console.log('['+new Date().toLocaleString('iso') + "] GET " +
-                    url.path + ' not found');
+            url.path + ' not found');
         result.data = readFile('template/error404.html');
         result.type = 'text/html';
         result.status = 404;
@@ -300,9 +304,8 @@ var modele = creerModele(readFile("corpus/hp"), true)
 //       MODIFIER EST CI-DESSOUS
 // -------------------------------------
 
-/* 
-Cette fonction sert a remplacer des etiquettes des pages html fournies pour 
-les valeurs désirées. Elle est utilisée maintes fois.
+/* Cette fonction sert a remplacer des etiquettes des pages html 
+ * fournies pour les valeurs désirées. Elle est utilisée maintes fois.
  */
 var substituerEtiquette = function (texte, etiquette, valeur) {
     var valeurCorrigee; 
@@ -317,9 +320,9 @@ var substituerEtiquette = function (texte, etiquette, valeur) {
 
 
 /* 
-Fonction qui va chercher notre page index(accueil) et va remplacer les 
-étiquettes de départ avec les valeurs appropriées comme afficher une liste
-d'articles récents(ici randomisée) et une image du jour
+ * Fonction qui va chercher notre page index(accueil) et va remplacer les 
+ * étiquettes de départ avec les valeurs appropriées comme afficher une liste
+ * d'articles récents(ici randomisée) et une image du jour
  */
 var getIndex = function () {
     var template = readFile("template/index.html");
@@ -336,21 +339,20 @@ var getIndex = function () {
     var resultat = substituerEtiquette(template, 
         "{{{articles-recents}}}", liensTitres),
         liste = "<ul>\n" + resultat + "</ul>";
-    
+
     var avecImage = substituerEtiquette(resultat, 
         "{{img}}", getImage());
-    
+
     //writeFile("test.html", avecImage);
     return avecImage; 
 };
 
 
 /* 
-Cette procédure ne prend aucun argument. Elle lit la variable
-globale premieresPhrases, de type Array, puis de ce tableau
-retourne un des éléments, de type String.
+ * Cette fonction ne prend aucun argument. Elle lit la variable
+ * globale premieresPhrases, de type Array, puis de ce tableau
+ * retourne un des éléments, de type String.
  */
-
 function getPhrase() {
     var index = Math.random() * premieresPhrases.length;
     return premieresPhrases[index >> 0]; // équivalent de floor
@@ -358,10 +360,11 @@ function getPhrase() {
 
 
 /*
-Fonction qui va chercher notre page d'article et la personnalise au titre 
-désiré avec une image randomisée et utilise la fonction genererParagraphes de
-notre modele de Markov pour generer du texte aleatoire
-*/
+ * Fonction qui va chercher notre page d'article et la personnalise au titre 
+ * désiré avec une image randomisée et utilise la fonction 
+ * genererParagraphesi() de notre modele de Markov pour generer du
+ * texte aleatoire
+ */
 var getArticle = function(titre) {
 
     var template = readFile("template/article.html"),
@@ -375,9 +378,8 @@ var getArticle = function(titre) {
         "{{titre-2}}", titre.substring(titre.length >> 1));
     var introTitre = substituerEtiquette(introMoitie2,
         "{{titre}}", titre);
-	
-	
-	//On fait un map sur nos paragraphes pour les baliser correctement
+
+    //On fait un map sur nos paragraphes pour les baliser correctement
     var paragraphes = genererParagraphes(modele, 4,8,20)
         .map(function(paragraphe){
             return "<p>" + baliserPar(paragraphe) + "</p>\n"; 
@@ -391,8 +393,9 @@ var getArticle = function(titre) {
 };
 
 
-//Fonction qui détermine si un mot de longueur suffisante devrait apparaître 
-//avec une esthétique particulière et si oui lui appelle un balisage
+/* Fonction qui détermine si un mot de longueur suffisante devrait apparaître 
+ * avec une esthétique particulière et si oui lui appelle un balisage
+ */
 function baliserMot(mot) {
     if (estValide(mot)){
         var uniforme01 = Math.random();
@@ -410,26 +413,28 @@ function baliserMot(mot) {
 //Fonction qui balise les mots passés en paramètres selon le type désiré
 var balisage = function(mot,type){
     if(type=='a')
-		//	Transformer première lettre de mot en maj pour chercher la page?
+        // Transformer première lettre de mot en maj pour chercher la page?
         return "<a href=/article/"+mot+">"+mot+"</a>";
-		
+
     else 
         return "<" + type + ">" + mot + "</" + type + ">";
 };
+
 
 //Fonction qui traite les paragraphes pour chercher les bons mots a baliser
 function baliserPar(paragraphe) {
     var tabParag = paragraphe.split(" "); 
     var nouveauParag = tabParag.map(function(x){
-		if (estValide(x)) return baliserMot(x);
-		else return x;
-	});
-    return nouveauParag. join(" "); // TODO: rendre ça legit et tester
+        if (estValide(x)) return baliserMot(x);
+        else return x;
+    });
+    return nouveauParag. join(" ");
 }
 
 
-
-//reçoit un mot et retourne true s'il a au moins une longueur de 7
+/* Reçoit un mot et retourne true s'il a au moins une longueur de 7
+ * et est alphabétique. Sinon, retourne false.
+ */
 function estValide(mot) {
     if (mot.length < 7)
         return false;
@@ -465,7 +470,8 @@ http.createServer(function (requete, reponse) {
         doc = {status: 200, data: getIndex(), type: 'text/html'};
     } else if(url.pathname == '/random') {
         // Page au hasard
-        redirect(reponse, '/article/' + encodeURIComponent(getRandomPageTitles(1)[0]));
+        redirect(reponse, '/article/' + encodeURIComponent(
+            getRandomPageTitles(1)[0]));
         return;
     } else {
         var parsedPath = pathParse(url.pathname);
@@ -479,7 +485,8 @@ http.createServer(function (requete, reponse) {
                 title = parsedPath.base.split('%20').join(' ');
             }
 
-            // Force les articles à commencer avec une majuscule si c'est une lettre
+            /* Force les articles à commencer avec une 
+             * majuscule si c'est une lettre */
             var capital = title.charAt(0).toUpperCase() + title.slice(1);
             if(capital != title) {
                 redirect(reponse, encodeURIComponent(capital));
@@ -497,11 +504,13 @@ http.createServer(function (requete, reponse) {
 
 
 function tests(){
+    console.assert(substituerEtiquette("hellooooo {{{tacos}}}", 
+        "{{{tacos}}}", "<taco>🌮</taco>") == 'hellooooo <taco>🌮</taco>');
     console.assert(substituerEtiquette("hellooooo {{{tacos}}} ", 
-        "{{{tacos}}}", "<taco>🌮</taco>") == 'hellooooo <taco>🌮</taco> ');
-    console.assert(substituerEtiquette("hellooooo {{{tacos}}} ", 
-        "{{tacos}}", "<taco>🌮</taco>") == 'hellooooo {&lt;taco&gt;🌮&lt;/taco&gt;} ');
-    console.assert(substituerEtiquette("hellooooo {{{tacos}}} would you like {{{tacos}}} ?", "{{{tacos}}}", "<taco>🌮</taco>")
+        "{{tacos}}", "<taco>🌮</taco>") == 
+        'hellooooo {&lt;taco&gt;🌮&lt;/taco&gt;} ');
+    console.assert(substituerEtiquette("hellooooo {{{tacos}}} " +
+        "would you like {{{tacos}}} ?", "{{{tacos}}}", "<taco>🌮</taco>")
 	== 'hellooooo <taco>🌮</taco> would you like <taco>🌮</taco> ?');
 	
 	console.assert(estValide("jolIRobe")==true);
