@@ -425,7 +425,7 @@ function baliserPar(paragraphe) {
 }
 
 
-/
+
 //reçoit un mot et retourne true s'il a au moins une longueur de 7
 function estValide(mot) {
     if (mot.length < 7)
@@ -498,7 +498,17 @@ function tests(){
         "{{{tacos}}}", "<taco>🌮</taco>") == 'hellooooo <taco>🌮</taco> ');
     console.assert(substituerEtiquette("hellooooo {{{tacos}}} ", 
         "{{tacos}}", "<taco>🌮</taco>") == 'hellooooo {&lt;taco&gt;🌮&lt;/taco&gt;} ');
-    console.assert(substituerEtiquette("hellooooo {{{tacos}}} would you like {{{tacos}}} ?", "{{{tacos}}}", "<taco>🌮</taco>") == 'hellooooo <taco>🌮</taco> would you like <taco>🌮</taco> ?');
+    console.assert(substituerEtiquette("hellooooo {{{tacos}}} would you like {{{tacos}}} ?", "{{{tacos}}}", "<taco>🌮</taco>")
+	== 'hellooooo <taco>🌮</taco> would you like <taco>🌮</taco> ?');
+	
+	console.assert(estValide("jolIRobe")==true);
+	console.assert(estValide("jolIRo56be")==false);
+	console.assert(estValide("jolIR")==false);
+	
+	console.assert(balisage("joli", "allo")=="<allo>joli</allo>");
+	console.assert(balisage(38,"a")=="<a href=/article/38>38</a>");
+	
+	
 }
 
 

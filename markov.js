@@ -22,7 +22,7 @@ var writeFile = function (path, texte) {
 
 
 // ceci est la constante r utilisée pour choisir l'ordre de Markov.
-var r = 3;
+var r = 1;
 
 
 /* C'est la fonction principale. Reçoit du texte : string 
