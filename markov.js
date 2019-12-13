@@ -85,19 +85,10 @@ Array.prototype.indexOfMot = function (motCible){
 }
 
 
-/* Cette fonction reçoit 2 tableaux en paramètres:
-  1. Le premier tableau contient des strings
-  2. Le deuxième tableau contient des paires de strings
-     Le 1er élément de la paire est les r éléments qui précèdent un mot
-     Le 2e élément de la paire est ce mot.
- 
-  Elle retourne un tableau d'enregistrements en comptant les occurences 
-  (Probas?)du 2e élément du 2e tableau.
- 
-  Pour comprendre le fonctionnement de cette fonction, il est important
-  de savoir que l'argument megaGroupes contient des paires de 2 strings:
-  a) la 1re string contient les mots précédents
-  b) la 2e string contient le mot actuel.
+/* 
+ Cette fonction va retourner un tableau d'enregistrement de prochains mots
+ possibles avec leurs probabilités respectives a partir de notre dictionnaire
+ et de nos groupes de mots.
  */
 function trouverProchains(dico, megaGroupes) {
     var resultat = [],
@@ -211,11 +202,9 @@ function megaGrouper(mots, n) {
 
 /* 
 Cette fonction reçoit un tableau de mots et retourne le premier index du dit 
-tableau qui n'est pas un 
- * et retourne le premier index où ce tableau ne commence pas
- * par une chaine vide. Type du retour: number
+tableau qui n'est pas un caractère de vide
  */
-function debutPropre(tableau){ //se fait appeler par megaGroupes
+function debutPropre(tableau){ 
     var i;
     for (i = 0; i < tableau.length; i++)
         if (tableau[i] != "") 
@@ -224,14 +213,17 @@ function debutPropre(tableau){ //se fait appeler par megaGroupes
 }
 
 
-// reçoit un caractère: String
-// => retourne si c'est un espace: Bool
+//Fonction qui retourne vrai si le caractère envoyé est un espace ou un saut de
+// ligne
 function estEspaceOuRetour(caract) {
     return (caract == " " || caract == "\n"); 
 }
 
 
-// Cette fonction obtient l'indice de motActuel en parcourant le dictionnaire
+/* 
+Cette fonction obtient l'indice du mot actuel en parcourant le dictionnaire et 
+parcoure les possibilités du prochain mot déterminé aléatoirement
+*/
 var genererProchainMot = function(modele, motActuel) {
     var index = modele.dictionnaire.indexOf(motActuel),
         prochainsPossibles = modele.prochainsMots[index],
@@ -249,13 +241,10 @@ var genererProchainMot = function(modele, motActuel) {
 };
 
 
-/* exemple d'appel de genererProchainMot:
-// genererProchainMot(modeleTaco, "taco")
-var modeleTaco = creerModele("Je suis le plus taco des taco, j'aime tous le taco du monde et je taco taco avec toi taco!");
-var modeleTest = creerModele('A B C.\nA B A.\nC B A.');*/
-
-
-
+/*
+Va générer des phrases en utilisant le modèle avec des contraintes de longueur 
+et de débuts et fin de phrases
+*/
 var genererPhrase = function(modele, maxNbMots) {
     var prochainMot,
         phrase = [];
@@ -274,8 +263,10 @@ var genererPhrase = function(modele, maxNbMots) {
 };
 
 
-/* Cette fonction reçoit un modèle (objet) et 3 nombres.
- * Elle retourne une String
+/*
+Cette dernière fonction génère nos paragraphes avec les critères de nombres de
+mots par phrase, nombre de phrases par paragraphes et quantité de paragraphes
+désirés à partir de notre modèle de Markov.
  */
 var genererParagraphes = function(modele, nbParagraphes, maxNbPhrases, maxNbMots) {
     var paragraphes = [],
