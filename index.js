@@ -30,19 +30,40 @@ var genererParagraphes = markov.genererParagraphes;
 // Ajoutez-en si vous avez des idées!
 var premieresPhrases = [
     "<strong>{{titre}}</strong> est un animal aquatique nocturne.",
-    "<strong>{{titre}}</strong> (du grec ancien <em>\"{{titre-1}}\"</em> et <em>\"{{titre-2}}\"</em>), est le nom donné par Aristote à la vertu politique.",
-    "<strong>{{titre}}</strong>, né le 30 août 1987 à Portland (Oregon), est un scénariste américain.",
-    "<strong>{{titre}}</strong>, née le 30 septembre 1982 à Québec, est une femme politique québécoise.",
-    "<strong>{{titre}}</strong> est défini comme « l'ensemble des règles imposées aux membres d'une société pour que leurs rapports sociaux échappent à l'arbitraire et à la violence des individus et soient conformes à l'éthique dominante ».",
-    "<strong>{{titre}}</strong>, néologisme du XXe siècle, attesté en 1960, composite du grec ancien <em>{{titre-1}}</em> et du latin <em>{{titre-2}}</em>, est le principe déclencheur d'événements non liés à une cause connue.",
-    "<strong>{{titre}}</strong> est une espèce fossile d'euryptérides ressemblant aux arachnides, appartenant à la famille des <em>{{titre-1}}</em>.",
-    "<strong>{{titre}}</strong>, né le 25 juin 1805 à Lyon et mort le 12 février 1870 à Versailles, est un peintre animalier français.",
-    "<strong>{{titre}}</strong> est le titre d'un épisode de la série télévisée d'animation Les Simpson. Il s'agit du quatre-vingt-dix-neuvième épisode de la soixante-huitième saison et du 8 615e épisode de la série.",
-    "<strong>{{titre}}</strong>, composé de <em>{{titre-1}}</em>- et de -<em>{{titre-2}}</em>, consiste en l'étude d'une langue et de sa littérature à partir de documents écrits."
+    "<strong>{{titre}}</strong> (du grec ancien <em>\"{{titre-1}}\"</em> et "+
+    "<em>\"{{titre-2}}\"</em>), est le nom donné par Aristote à la vertu "+
+    "politique.",
+    "<strong>{{titre}}</strong>, né le 30 août 1987 à Portland (Oregon),"+
+    "est un scénariste américain.",
+    "<strong>{{titre}}</strong>, née le 30 septembre 1982 à Québec, est "+
+    "une femme politique québécoise.",
+    "<strong>{{titre}}</strong> est défini comme « l'ensemble des règles "+
+    "imposées aux membres d'une société pour que leurs rapports sociaux "+
+    "échappent à l'arbitraire et à la violence des individus et soient "+
+    "conformes à l'éthique dominante ».",
+    "<strong>{{titre}}</strong>, néologisme du XXe siècle, attesté en 1960,"+
+    "composite du grec ancien <em>{{titre-1}}</em> et du latin "+
+    "<em>{{titre-2}}</em>, est le principe déclencheur d'événements non "+
+    "liés à une cause connue.",
+    "<strong>{{titre}}</strong> est une espèce fossile d'euryptérides "+
+    "ressemblant aux arachnides, appartenant à la famille des "+
+    "<em>{{titre-1}}</em>.",
+    "<strong>{{titre}}</strong>, né le 25 juin 1805 à Lyon et mort le "+
+    "12 février 1870 à Versailles, est un peintre animalier français.",
+    "<strong>{{titre}}</strong> est le titre d'un épisode de la série "+
+    "télévisée d'animation Les Simpson. Il s'agit du quatre-vingt-dix-"+
+    "neuvième épisode de la soixante-huitième saison et du 8 615e épisode"+
+    "de la série.",
+    "<strong>{{titre}}</strong>, composé de <em>{{titre-1}}</em>- et de "+
+    "-<em>{{titre-2}}</em>, consiste en l'étude d'une langue et de sa "+
+    "littérature à partir de documents écrits."
 ];
 
 // --- Utilitaires ---
 var readFile = function (path, binary) {
+    // solution possible
+    //if(path.includes(".."))
+      //  return "";
     if(!binary)
         return fs.readFileSync(path).toString('utf8');
     return fs.readFileSync(path, {encoding: 'binary'});
@@ -151,7 +172,8 @@ var getPageFirstImage = function(title) {
 
         images = images.filter(function(x) {
             var parts = x.split('.');
-            return ['jpg', 'png', 'jpeg', 'gif'].indexOf(parts[parts.length - 1]) !== -1;
+            return ['jpg', 'png', 'jpeg', 'gif']
+                .indexOf(parts[parts.length - 1]) !== -1;
         });
 
         if(images.length > 0)
@@ -465,7 +487,17 @@ http.createServer(function (requete, reponse) {
 
     var doc;
 
-    if (url.pathname == defaultPage) {
+    // ce if remédie au problème de sécurité.
+    if (url.pathname.includes("..")) {
+        // Unauthorized access.
+        doc = { status:401, 
+            data:readFile('template/error401.html'), 
+            type:'text/html' };
+        console.log('['+new Date().toLocaleString('iso') + "] GET " +
+            url.path + ' not authorized');
+        // fin du remède de sécurité!
+
+    } else if (url.pathname == defaultPage) {
         // Index
         doc = {status: 200, data: getIndex(), type: 'text/html'};
     } else if(url.pathname == '/random') {
