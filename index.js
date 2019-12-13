@@ -346,7 +346,7 @@ var getIndex = function () {
 
 
 /* 
-
+HELP
  */
 function getPhrase() {
     var index = Math.random() * premieresPhrases.length;
@@ -354,7 +354,11 @@ function getPhrase() {
 }
 
 
-
+/*
+Fonction qui va chercher notre page d'article et la personnalise au titre 
+désiré avec une image randomisée et utilise la fonction genererParagraphes de
+notre modele de Markov pour generer du texte aleatoire
+*/
 var getArticle = function(titre) {
 
     var template = readFile("template/article.html"),
@@ -368,7 +372,9 @@ var getArticle = function(titre) {
         "{{titre-2}}", titre.substring(titre.length >> 1));
     var introTitre = substituerEtiquette(introMoitie2,
         "{{titre}}", titre);
-
+	
+	
+	//On fait un map sur nos paragraphes pour les baliser correctement
     var paragraphes = genererParagraphes(modele, 4,8,20)
         .map(function(paragraphe){
             return "<p>" + baliserPar(paragraphe) + "</p>\n"; 
@@ -381,6 +387,9 @@ var getArticle = function(titre) {
     return article;
 };
 
+
+//Fonction qui détermine si un mot de longueur suffisante devrait apparaître 
+//avec une esthétique particulière et si oui lui appelle un balisage
 function baliserMot(mot) {
     if (estValide(mot)){
         var uniforme01 = Math.random();
@@ -394,6 +403,8 @@ function baliserMot(mot) {
     return mot;
 }
 
+
+//Fonction qui balise les mots passés en paramètres selon le type désiré
 var balisage = function(mot,type){
     if(type=='a')
 		//	Transformer première lettre de mot en maj pour chercher la page?
@@ -403,7 +414,7 @@ var balisage = function(mot,type){
         return "<" + type + ">" + mot + "</" + type + ">";
 };
 
-
+//Fonction qui traite les paragraphes pour chercher les bons mots a baliser
 function baliserPar(paragraphe) {
     var tabParag = paragraphe.split(" "); 
     var nouveauParag = tabParag.map(function(x){
@@ -414,8 +425,8 @@ function baliserPar(paragraphe) {
 }
 
 
-// reçoit un mot : String
-// retourne s'il est 7+ lettres et alphabétique : Bool
+/
+//reçoit un mot et retourne true s'il a au moins une longueur de 7
 function estValide(mot) {
     if (mot.length < 7)
         return false;
