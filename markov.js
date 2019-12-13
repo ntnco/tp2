@@ -28,7 +28,7 @@ var r = 1;
 /* C'est la fonction principale. Reçoit du texte : string 
  * Retourne un modèle de Markov: {[strings], [enregistrements]}
  */
-var creerModele = function(texte, trace) {
+var creerModele = function(texte) {
 
     var mots = obtenirMots(texte), 
         groupes = grouper(mots, r),
@@ -36,26 +36,19 @@ var creerModele = function(texte, trace) {
         modele = {};
 
     modele.dictionnaire = toutSaufLesDerniers(megaGroupes);
-    console.log("dico done");
+
     modele.prochainsMots = trouverProchains(modele.dictionnaire, 
         megaGroupes);
-    console.log("all done");
+
 
     // pour déboguer la chaine d'ordre r, ne s'applique que 
     // si le 3e argument de creerModele() est true.
-    if (trace) {
-        /*console.log(groupes);
-        console.log(megaGroupes);
-        console.log("dictionnaire");
-        console.table(modele.dictionnaire);
-        console.log("prochainsMots");
-        console.table(modele.prochainsMots, [0]);*/
-        console.table(modele.prochainsMots[1]);
-    }
+
 
     return modele;
 };
 
+/*
 function t2() { // pour Tester la chaine d'ordre 2
     return creerModele(readFile("corpus/eros"), true) 
 }
@@ -71,7 +64,7 @@ function p2() {
 function par2() {
     return genererParagraphes(t2(), 1, 5, 15)
 }
-
+*/
 
 /* Cette méthode cherche un motCible de type string 
  * dans un tableau d'enregistrements.
@@ -226,13 +219,11 @@ Cette fonction obtient l'indice du mot actuel en parcourant le dictionnaire et
 parcoure les possibilités du prochain mot déterminé aléatoirement
 */
 var genererProchainMot = function(modele, motActuel) {
-	console.log(motActuel);
+
     var index = modele.dictionnaire.indexOf(motActuel),
         prochainsPossibles = modele.prochainsMots[index],
         cumul = 0;
-	console.log("index ", index);
-    //console.log(motActuel);
-    //console.table(prochainsPossibles)
+
     if (prochainsPossibles.length == 0) {
         return null;
     }

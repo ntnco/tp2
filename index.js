@@ -346,8 +346,11 @@ var getIndex = function () {
 
 
 /* 
-HELP
+Cette procédure ne prend aucun argument. Elle lit la variable
+globale premieresPhrases, de type Array, puis de ce tableau
+retourne un des éléments, de type String.
  */
+
 function getPhrase() {
     var index = Math.random() * premieresPhrases.length;
     return premieresPhrases[index >> 0]; // équivalent de floor
@@ -494,7 +497,7 @@ http.createServer(function (requete, reponse) {
 
 
 function tests(){
-    console/assert(substituerEtiquette("hellooooo {{{tacos}}} ", 
+    console.assert(substituerEtiquette("hellooooo {{{tacos}}} ", 
         "{{{tacos}}}", "<taco>🌮</taco>") == 'hellooooo <taco>🌮</taco> ');
     console.assert(substituerEtiquette("hellooooo {{{tacos}}} ", 
         "{{tacos}}", "<taco>🌮</taco>") == 'hellooooo {&lt;taco&gt;🌮&lt;/taco&gt;} ');
@@ -508,7 +511,10 @@ function tests(){
 	console.assert(balisage("joli", "allo")=="<allo>joli</allo>");
 	console.assert(balisage(38,"a")=="<a href=/article/38>38</a>");
 	
+	//On ne peut pas faire de tests sur getArticle et getIndex.
 	
+	//On ne fait pas de tests sur baliserPar et baliserMot car ils sont 
+	//dépendants de variables aléatoires.
 }
-
+tests();
 
