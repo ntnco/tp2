@@ -48,23 +48,6 @@ var creerModele = function(texte) {
     return modele;
 };
 
-/*
-function t2() { // pour Tester la chaine d'ordre 2
-    return creerModele(readFile("corpus/eros"), true) 
-}
-
-function g2(mot) {
-    return genererProchainMot(t2(), mot);
-}
-
-function p2() {
-    return genererPhrase(t2(), 10);
-}
-
-function par2() {
-    return genererParagraphes(t2(), 1, 5, 15)
-}
-*/
 
 /* Cette méthode cherche un motCible de type string 
  * dans un tableau d'enregistrements.
