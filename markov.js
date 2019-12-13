@@ -21,38 +21,54 @@ var writeFile = function (path, texte) {
 };
 
 
-/* 
-Cette fonction reçoit un texte et retourne un modèle de Markov 
-{dictionnaire=[],prochainsMots=[]}. Dictionaire un tableau de textes(strings)
-et prochains mot un tableau de tableaux d'enregistrement mots-probabilités
+// ceci est la constante r utilisée pour choisir l'ordre de Markov.
+var r = 2;
+
+/* C'est la fonction principale. Reçoit du texte : string 
+ * Retourne un modèle de Markov: {[strings], [enregistrements]}
  */
-var creerModele = function(texte, r = 1, trace) {
+var creerModele = function(texte, trace) {
 
     var mots = obtenirMots(texte), 
         groupes = grouper(mots, r),
         megaGroupes = megaGrouper(mots, r),
         modele = {};
 
-    modele.dictionnaire = toutSaufLesDerniers(groupes);
+    modele.dictionnaire = toutSaufLesDerniers(megaGroupes);
+    console.log("dico done");
     modele.prochainsMots = trouverProchains(modele.dictionnaire, 
         megaGroupes);
+    console.log("all done");
 
     // pour déboguer la chaine d'ordre r, ne s'applique que 
     // si le 3e argument de creerModele() est true.
     if (trace) {
-        console.log(groupes);
+        /*console.log(groupes);
         console.log(megaGroupes);
         console.log("dictionnaire");
         console.table(modele.dictionnaire);
         console.log("prochainsMots");
-        console.table(modele.prochainsMots);
+        console.table(modele.prochainsMots, [0]);*/
+        console.table(modele.prochainsMots[1]);
     }
 
     return modele;
 };
 
 function t2() { // pour Tester la chaine d'ordre 2
-    creerModele(readFile("corpus/exemple"), 2, true) 
+    return creerModele(readFile("corpus/eros"), true) 
+}
+
+function g2(mot) {
+    return genererProchainMot(t2(), mot);
+}
+
+function p2() {
+    return genererPhrase(t2(), 10);
+}
+
+function par2() {
+    return genererParagraphes(t2(), 1, 5, 15)
 }
 
 
@@ -114,14 +130,16 @@ function toutSaufLesDerniers(tableau) {
 
 
 /* 
-Cette fonction reçoit un texte et retrourne un tableau qui contient 
+Cette fonction reçoit un texte et retourne un tableau qui contient 
 tous les mots du texte en les séparant aux espaces et aux sauts de ligne. Elle
-appliquera le traitement approprié dans chacun des cas.
+applique le traitement approprié dans chacun des cas.
 */
 function obtenirMots(texte) { 
     var mots = [],
         motActuel = "",
-        caracActuel, caracPrecedent;
+        caracActuel, caracPrecedent,
+        sautsLigne = Array(r).fill("");
+
     for (var i = 0; i < texte.length; i++) {
         caracActuel = texte.charAt(i);
         if (estEspaceOuRetour(caracActuel)) {   
@@ -133,7 +151,7 @@ function obtenirMots(texte) {
 
             //Traitement spécial en fin de ligne	
             if (caracActuel == "\n")
-                mots.push(""); 
+                mots.push(...sautsLigne); 
         } else {
             motActuel += caracActuel;
 
@@ -143,6 +161,7 @@ function obtenirMots(texte) {
         }
         caracPrecedent = caracActuel;
     }
+    //console.table(mots);
 
     return mots;
 }
@@ -208,13 +227,15 @@ parcoure les possibilités du prochain mot déterminé aléatoirement
 var genererProchainMot = function(modele, motActuel) {
     var index = modele.dictionnaire.indexOf(motActuel),
         prochainsPossibles = modele.prochainsMots[index],
-        nombreHasard = Math.random(), 
         cumul = 0;
-    if (prochainsPossibles.length === 0)
+    //console.log(motActuel);
+    //console.table(prochainsPossibles)
+    if (prochainsPossibles.length == 0) {
         return null;
+    }
     for (cas of prochainsPossibles) {
         cumul += cas.prob;
-        if (cumul > nombreHasard)
+        if (cumul > Math.random())
             return cas.mot;
     }
 };
@@ -236,7 +257,7 @@ var genererPhrase = function(modele, maxNbMots) {
         if (i == maxNbMots - 1)
             prochainMot += ".";
         phrase.push(prochainMot);
-        motActuel = prochainMot;
+        motActuel = phrase.slice(-r).join(" ").trim();
     }
     return phrase.join(" ");
 };
