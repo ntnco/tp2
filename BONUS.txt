@@ -1,0 +1,20 @@
+Pour ce TP, nous avons complété les 2 bonus.
+
+1. Bonus ordre r
+Pour évaluer ce bonus, vous n'avez qu'à modifier
+la variable globale r dans le fichier markov.js
+
+2. Bonus sécurité (1)
+Faille exploitée: Directory traversal
+Pour l'exploiter: lancez le script BONUS_faille.py
+---> testez avec le champ ../index.js
+---> pour faire une attaque plus méchante, remplacez ce champ par
+     ../../../leFichierRootInteressant.txt
+---> vous verrez que ce script fonctionne sur les travaux des 
+     autres étudiants, du moins ceux qui n'ont pas réparé cette 
+     faille.
+---> bien sûr, ce script ne fonctionne pas sur notre travail.
+    
+Notre démarche pour réparer la faille:
+Nous avons ajouté une couche de validation d'url dans index.js
+entre les lignes 490 et 500.

@@ -63,7 +63,7 @@ var premieresPhrases = [
 var readFile = function (path, binary) {
     // solution possible
     //if(path.includes(".."))
-      //  return "";
+    //  return "";
     if(!binary)
         return fs.readFileSync(path).toString('utf8');
     return fs.readFileSync(path, {encoding: 'binary'});
@@ -305,26 +305,26 @@ var sendPage = function (reponse, page) {
 
 
 /*
--------------------------------------------------------------------------------
-                           _____ ___  ____   ___
-                          |_   _/ _ \|  _ \ / _ \
-                            | || | | | | | | | | |
-                            | || |_| | |_| | |_| |
-                            |_| \___/|____/ \___/
+------------------------------------------------------------------------------
+                           _____ 
+                          |  __ \                  
+                          | |  | | ___  _ __   ___ 
+                          | |  | |/ _ \| '_ \ / _ \
+                          | |__| | (_) | | | |  __/
+                          |_____/ \___/|_| |_|\___|
 
-                   Le code à compléter se trouve ci-dessous
--------------------------------------------------------------------------------
+          Le code complété (sauf le bonus sécurité, lignes 490-500) 
+                            se trouve ci-dessous.
+------------------------------------------------------------------------------
 */
-
-// variable globale du modèle
-var modele = creerModele(readFile("corpus/hp"), true)
-
 
 // -------------------------------------
 //  Logique de l'application ci-dessous
-//    LE SEUL CODE QUE VOUS AVEZ À
-//       MODIFIER EST CI-DESSOUS
 // -------------------------------------
+
+// variable globale du modèle est ci-dessous. Changer le nom du corpus
+// pour créer un modèle sur un autre sujet que Harry Potter (hp)
+var modele = creerModele(readFile("corpus/hp"), true)
 
 /* Cette fonction sert a remplacer des etiquettes des pages html 
  * fournies pour les valeurs désirées. Elle est utilisée maintes fois.
@@ -447,8 +447,10 @@ var balisage = function(mot,type){
 function baliserPar(paragraphe) {
     var tabParag = paragraphe.split(" "); 
     var nouveauParag = tabParag.map(function(x){
-        if (estValide(x)) return baliserMot(x);
-        else return x;
+        if (estValide(x)) 
+            return baliserMot(x);
+        else 
+            return x;
     });
     return nouveauParag. join(" ");
 }
@@ -543,19 +545,21 @@ function tests(){
         'hellooooo {&lt;taco&gt;🌮&lt;/taco&gt;} ');
     console.assert(substituerEtiquette("hellooooo {{{tacos}}} " +
         "would you like {{{tacos}}} ?", "{{{tacos}}}", "<taco>🌮</taco>")
-	== 'hellooooo <taco>🌮</taco> would you like <taco>🌮</taco> ?');
-	
-	console.assert(estValide("jolIRobe")==true);
-	console.assert(estValide("jolIRo56be")==false);
-	console.assert(estValide("jolIR")==false);
-	
-	console.assert(balisage("joli", "allo")=="<allo>joli</allo>");
-	console.assert(balisage(38,"a")=="<a href=/article/38>38</a>");
-	
-	//On ne peut pas faire de tests sur getArticle et getIndex.
-	
-	//On ne fait pas de tests sur baliserPar et baliserMot car ils sont 
-	//dépendants de variables aléatoires.
+        == 'hellooooo <taco>🌮</taco> would you like <taco>🌮</taco> ?');
+
+    console.assert(estValide("jolIRobe")==true);
+    console.assert(estValide("jolIRo56be")==false);
+    console.assert(estValide("jolIR")==false);
+    console.assert(estValide("66666666666")==false);
+    console.assert(estValide("")==false);
+    console.assert(estValide("Université")==false);
+
+    console.assert(balisage("joli", "allo")=="<allo>joli</allo>");
+    console.assert(balisage(38,"a")=="<a href=/article/38>38</a>");
+
+    //On ne peut pas faire de tests sur getArticle et getIndex.
+    //Pas non plus de tests sur baliserPar et baliserMot car ils sont 
+    //dépendants de variables aléatoires.
 }
 tests();
 

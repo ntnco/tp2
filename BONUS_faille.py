@@ -1,3 +1,7 @@
+''' 
+ce code provient en majorité du lien suivant:
+https://stackoverflow.com/a/45708544/4009787
+'''
 import socket
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
